@@ -1,7 +1,19 @@
 services:
-  web:
+  #  db:
+  #    image: postgres:12
+  #    ports:
+  #      - "5432:5432"
+  #    env_file:
+  #      - .env
+  #    environment:
+  #      - PGDATA=/var/lib/postgresql/data/pgdata
+  #      - POSTGRES_PASSWORD=${postgres_password?Variable not set}
+  #      - POSTGRES_USER=${postgres_user?Variable not set}
+  #      - POSTGRES_DB=${postgres_db?Variable not set}
+
+  backend:
     # Build the image from the Dockerfile in the current directory
-    build: .
+    build: backend/
 
     # Host the FastAPI application on port 8000
     ports:
@@ -14,12 +26,12 @@ services:
         # Sync the working directory with the `/app` directory in the container
         - action: sync
           path: .
-          target: /app
+          target: backend/app
           # Exclude the project virtual environment — it could be for a
           # different platform in the container
           ignore:
-            - .venv/
+            - backend/.venv/
 
         # Rebuild the image if dependencies change by checking uv.lock
         - action: rebuild
-          path: ./uv.lock
+          path: ./backend/uv.lock

@@ -9,7 +9,6 @@ from sqlalchemy import (
 
 metadata = MetaData()
 
-
 users_table = Table(
     "users",
     metadata,
@@ -19,5 +18,3 @@ users_table = Table(
     Column("password_hash", String(255), nullable=False),
     Column("bio", Text, nullable=True),
 )
-
-

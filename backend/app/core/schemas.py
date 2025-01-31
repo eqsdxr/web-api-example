@@ -21,6 +21,11 @@ class UserResponse(BaseModel):
     username: Annotated[str, StringConstraints(min_length=4, max_length=50)]
 
 
+class MultipleUsers(BaseModel):
+    count: int
+    users: list[UserResponse]
+
+
 class UserUpdate(BaseModel):
     email: EmailStr
     bio: Annotated[str, StringConstraints(max_length=500)]
