@@ -16,14 +16,12 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
+# from myapp import mymodel
+# target_metadata = mymodel.Base.metadata
+from app.models import metadata
+from app.config import main_config
 
-# look at https://www.encode.io/databases/tests_and_migrations/
-# to learn how to use the databases package with alembic
-
-from app.core.configuration import app_config
-from app.core.models import metadata
-
-config.set_main_option("sqlalchemy.url", app_config["database_url"])
+config.set_main_option("sqlalchemy.url", main_config["database_url"])
 target_metadata = metadata
 
 # other values from the config, defined by the needs of env.py,

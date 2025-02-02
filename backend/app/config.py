@@ -16,12 +16,11 @@ def get_config():
         "database_url": env.str("database_url"),
         "jwt_secret_key": env.str("jwt_secret_key"),
         "jwt_algorithm": env.str("jwt_algorithm"),
-        "admin_username": env.str("admin_username"),
-        "admin_email": env.str("admin_email"),
-        "admin_password": env.str("admin_password"),
+        "first_user_username": env.str("first_user_username"),
+        "first_user_password": env.str("first_user_password"),
         "access_token_duration_hours": env.int("access_token_duration_hours"),
     }
     return env_data
 
 
-app_config = get_config()
+main_config = get_config()

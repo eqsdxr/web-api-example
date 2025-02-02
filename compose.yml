@@ -1,37 +1,48 @@
 services:
-  #  db:
-  #    image: postgres:12
-  #    ports:
-  #      - "5432:5432"
-  #    env_file:
-  #      - .env
-  #    environment:
-  #      - PGDATA=/var/lib/postgresql/data/pgdata
-  #      - POSTGRES_PASSWORD=${postgres_password?Variable not set}
-  #      - POSTGRES_USER=${postgres_user?Variable not set}
-  #      - POSTGRES_DB=${postgres_db?Variable not set}
+  db:
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_PASSWORD=${postgres_password}
+      - POSTGRES_USER=${postgres_user}
+      - POSTGRES_DB=${postgres_db}
+    networks:
+      - my_network
 
   backend:
-    # Build the image from the Dockerfile in the current directory
+    # Build the image from the Dockerfile in the backend directory
     build: backend/
 
     # Host the FastAPI application on port 8000
     ports:
       - "8000:8000"
 
+    depends_on:
+      - db
+
+    networks:
+      - my_network
+
     develop:
-      # Create a `watch` configuration to update the appl
+      # Create a watch configuration to update the app
       # https://docs.docker.com/compose/file-watch/#compose-watch-versus-bind-mounts
       watch:
         # Sync the working directory with the `/app` directory in the container
         - action: sync
           path: .
           target: backend/app
-          # Exclude the project virtual environment — it could be for a
-          # different platform in the container
+          # Exclude the project virtual environment, as it may be platform-specific
           ignore:
             - backend/.venv/
 
         # Rebuild the image if dependencies change by checking uv.lock
         - action: rebuild
           path: ./backend/uv.lock
+
+networks:
+  my_network:
+    driver: bridge
+
