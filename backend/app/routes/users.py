@@ -1,7 +1,9 @@
+from datetime import datetime, timezone
 from typing import Annotated
-from uuid import UUID
+from uuid import UUID, uuid4
+
 from fastapi import APIRouter, Depends
-from sqlalchemy import Connection, select, text
+from sqlalchemy import Connection, insert, select, text
 
 from app.deps import get_db
 from app.models import user_table
@@ -14,6 +16,7 @@ from app.schemas import (
     UserUpdate,
     UserUpdateResponse,
 )
+from app.sec import hash_password
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -45,7 +48,17 @@ async def read_multiple_users(
 def create_user(
     user: UserCreate, conn: Annotated[Connection, Depends(get_db)]
 ) -> UserCreateResponse:
-    pass
+    stmt = insert(user_table).values(
+        bio=user.bio, 
+        created_at=datetime.now(timezone.utc),
+        email=user.email,
+        id=uuid4,
+        is_activated=False,
+        password_hash=hash_password(user.password), 
+        username=user.username 
+    )
+    result = conn.execute(stmt)
+    conn.commit()
 
 
 @router.patch("/{user_id}", response_model=UserUpdateResponse)
@@ -62,4 +75,3 @@ def delete_user(
     user_id: UUID, conn: Annotated[Connection, Depends(get_db)]
 ) -> UserDeleteResponse:
     pass
-
