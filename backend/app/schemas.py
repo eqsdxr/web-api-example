@@ -6,7 +6,9 @@ from pydantic import BaseModel, StringConstraints, EmailStr
 # User can use either email or username
 class LoginForm(BaseModel):
     email: EmailStr | None
-    username: Annotated[str | None, StringConstraints(min_length=4, max_length=50)]
+    username: Annotated[
+        str | None, StringConstraints(min_length=4, max_length=50)
+    ]
     password: Annotated[str, StringConstraints(min_length=8, max_length=50)]
     model_config = {"extra": "forbid"}
 

@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, Connection
 
 from app.config import main_config
 
-engine = create_engine(main_config["database_url"], echo=True)
+engine = create_engine(main_config["database_url"], autocommit=False, echo=True)
 
 
 def get_db() -> Generator[Connection, None, None]:
