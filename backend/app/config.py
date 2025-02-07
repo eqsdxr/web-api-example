@@ -13,6 +13,8 @@ def get_config():
     env = Env()
     env.read_env(path_to_env, recurse=False)
     env_data: dict = {
+        "environment": env.str("environment"),
+        "database_url_for_alembic": env.str("database_url_for_alembic"),
         "database_url": env.str("database_url"),
         "jwt_secret_key": env.str("jwt_secret_key"),
         "jwt_algorithm": env.str("jwt_algorithm"),

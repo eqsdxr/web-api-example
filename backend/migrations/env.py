@@ -21,7 +21,7 @@ if config.config_file_name is not None:
 from app.models import metadata
 from app.config import main_config
 
-config.set_main_option("sqlalchemy.url", main_config["database_url"])
+config.set_main_option("sqlalchemy.url", main_config["database_url_for_alembic"])
 target_metadata = metadata
 
 # other values from the config, defined by the needs of env.py,

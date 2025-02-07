@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Annotated
 
 from pydantic import BaseModel, StringConstraints, EmailStr
@@ -21,8 +22,8 @@ class LoginResponse(BaseModel):
 
 
 class UserCreate(BaseModel):
-    email: EmailStr
     bio: Annotated[str, StringConstraints(max_length=500)]
+    email: EmailStr
     password: Annotated[str, StringConstraints(min_length=8, max_length=50)]
     username: Annotated[str, StringConstraints(min_length=4, max_length=50)]
     model_config = {"extra": "forbid"}
@@ -41,8 +42,10 @@ class UserDeleteResponse(BaseModel):
 
 
 class SingleUserReadResponse(BaseModel):
-    email: EmailStr
     bio: Annotated[str, StringConstraints(max_length=500)]
+    created_at: datetime
+    email: EmailStr
+    is_activated: bool
     username: Annotated[str, StringConstraints(min_length=4, max_length=50)]
 
 
@@ -52,14 +55,16 @@ class MultipleUsersReadResponse(BaseModel):
 
 
 class UserUpdate(BaseModel):
-    email: EmailStr
     bio: Annotated[str, StringConstraints(max_length=500)]
+    email: EmailStr
+    is_activated: bool
     password: Annotated[str, StringConstraints(min_length=8, max_length=50)]
     username: Annotated[str, StringConstraints(min_length=4, max_length=50)]
     model_config = {"extra": "forbid"}
 
 
 class UserUpdateResponse(BaseModel):
-    email: EmailStr
     bio: Annotated[str, StringConstraints(max_length=500)]
+    email: EmailStr
+    is_activated: bool
     username: Annotated[str, StringConstraints(min_length=4, max_length=50)]

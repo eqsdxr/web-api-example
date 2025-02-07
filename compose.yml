@@ -1,3 +1,5 @@
+volumes:
+  postgres_data:
 services:
   db:
     image: postgres:17
@@ -11,37 +13,25 @@ services:
       - POSTGRES_DB=${postgres_db}
     networks:
       - my_network
-
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   backend:
-    # Build the image from the Dockerfile in the backend directory
     build: backend/
-
-    # Host the FastAPI application on port 8000
     ports:
       - "8000:8000"
-
     depends_on:
       - db
-
     networks:
       - my_network
-
     develop:
-      # Create a watch configuration to update the app
-      # https://docs.docker.com/compose/file-watch/#compose-watch-versus-bind-mounts
       watch:
-        # Sync the working directory with the `/app` directory in the container
         - action: sync
           path: .
-          target: backend/app
-          # Exclude the project virtual environment, as it may be platform-specific
+          target: backend
           ignore:
             - backend/.venv/
-
-        # Rebuild the image if dependencies change by checking uv.lock
         - action: rebuild
           path: ./backend/uv.lock
-
 networks:
   my_network:
     driver: bridge

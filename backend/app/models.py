@@ -11,8 +11,8 @@ from sqlalchemy import (
 
 metadata = MetaData()
 
-user_table = Table(
-    "user_table",
+users_table = Table(
+    "users_table",
     metadata,
     Column("bio", Text, nullable=True),
     Column("created_at", DateTime, nullable=False),
