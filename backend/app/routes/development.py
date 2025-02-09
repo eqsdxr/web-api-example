@@ -1,9 +1,10 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy import Connection, text
 
 from app.deps import get_db
+from app.schemas import MultipleUsersResponse
 
 router = APIRouter(prefix="/development", tags=["development"])
 
@@ -13,3 +14,9 @@ def check_database_connection(conn: Annotated[Connection, Depends(get_db)]):
     return {"something": [dict(row) for row in result.mappings()]}
 
 
+@router.post("/seed", response_model=MultipleUsersResponse)
+def seed_users_database(
+    conn: Annotated[Connection, Depends(get_db)],
+    amount_of_users: Annotated[int, Query(gt=-1, lt=200)] = 0
+) -> MultipleUsersResponse:
+    pass
