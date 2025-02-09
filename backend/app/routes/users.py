@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from typing import Annotated
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import Connection, insert, select
@@ -8,33 +8,38 @@ from sqlalchemy import Connection, insert, select
 from app.deps import get_db
 from app.models import users_table
 from app.schemas import (
+    MultipleUsersResponse,
     UserCreate,
-    UserCreateResponse,
+    UserResponse,
+    UserUpdate,
 )
 from app.sec import hash_password
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-#@router.get("/{user_id}", response_model=SingleUserReadResponse)
-#async def read_single_user(
-#    user_id: UUID, conn: Annotated[Connection, Depends(get_db)]
-#) -> SingleUserReadResponse:
-#    user = conn.execute(select(user_table).where(user_table.id == user_id))
-#
-#
-#@router.get("/", response_model=MultipleUsersReadResponse)
-#async def read_multiple_users(
-#    conn: Annotated[Connection, Depends(get_db)],
-#    skip: int = 0,
-#    limit: int = 10,
-#) -> MultipleUsersReadResponse:
-#    pass
-#
 
-@router.post("/", response_model=UserCreateResponse)
+@router.get("/{user_id}", response_model=UserResponse)
+async def read_single_user(
+    user_id: UUID, conn: Annotated[Connection, Depends(get_db)]
+) -> UserResponse:
+    user = conn.execute(select(users_table).where(users_table.c.id == user_id))
+    return UserResponse(**user.__dict__)  # Check if it works
+
+
+@router.get("/", response_model=MultipleUsersResponse)
+async def read_multiple_users(
+    conn: Annotated[Connection, Depends(get_db)],
+    offset: int = 0,
+    limit: int = 10,
+) -> MultipleUsersResponse:
+    users = conn.execute(select(users_table).offset(offset).limit(limit))
+    return MultipleUsersResponse(**users.__dict__)  # Check if it works
+
+
+@router.post("/", response_model=UserResponse)
 def create_user(
     user: UserCreate, conn: Annotated[Connection, Depends(get_db)]
-    ) -> UserCreateResponse:
+    ) -> UserResponse:
     email = conn.execute(select(users_table).where(users_table.c.email == user.email))
     print(email)
     if email.first():
@@ -53,18 +58,25 @@ def create_user(
     )
     conn.execute(stmt)
     conn.commit()
-    return UserCreateResponse(**user.model_dump())
+    return UserResponse(**user.model_dump())
 
 
-#@router.patch("/{user_id}", response_model=UserUpdateResponse)
-#def update_user(
-#    user_id: UUID,
-#    data: UserUpdate,
-#    conn: Annotated[Connection, Depends(get_db)],
-#) -> UserUpdateResponse:
-#    pass
-#
-#
+@router.patch("/{user_id}", response_model=UserResponse)
+def update_user(
+    user_id: UUID,
+    user_data: UserUpdate,
+    conn: Annotated[Connection, Depends(get_db)],
+) -> UserResponse:
+    user = conn.execute(select(users_table).where(users_table.c.id == user_id))
+    if not user.first():
+        raise HTTPException(404, "User not found.")
+    if user_data.password:
+        user_data.password = hash_password(user_data.password)
+    updated_data = user_data.model_dump(exclude_unset=True)
+    # TODO - add updating logic
+    return UserResponse(**user_data.model_dump())
+
+
 #@router.delete("/{user_id}", response_model=UserDeleteResponse)
 #def delete_user(
 #    user_id: UUID, conn: Annotated[Connection, Depends(get_db)]

@@ -33,7 +33,11 @@ class MultipleUsersResponse(BaseModel):
     users: list[UserResponse]
 
 
-class UserUpdate(UserBase):
-    is_activated: bool
-    password: Annotated[str, StringConstraints(min_length=8, max_length=50)]
+class UserUpdate(BaseModel):
+    bio: Annotated[str, StringConstraints(max_length=500)] | None = None
+    email: EmailStr | None = None
+    is_activated: bool | None = None
+    password: Annotated[str, StringConstraints(min_length=8, max_length=50)] | None = None
+    username: Annotated[str, StringConstraints(min_length=4, max_length=50)] | None = None
+
 

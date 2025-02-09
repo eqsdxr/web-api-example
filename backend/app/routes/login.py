@@ -2,13 +2,13 @@ from typing import Annotated
 
 from fastapi import APIRouter, Form
 
-from app.schemas import LoginResponse, LoginForm
+from app.schemas import LoginForm
 
 router = APIRouter(prefix="/login", tags=["login"])
 
-@router.post("/", response_model=LoginResponse)
-async def login(credentials: Annotated[LoginForm, Form()]) -> LoginResponse:
-    return LoginResponse(**credentials.model_dump())
+@router.post("/")
+async def login(credentials: Annotated[LoginForm, Form()]):
+    return "access_code"
 
 
 #@router.post("/", response_model=)
