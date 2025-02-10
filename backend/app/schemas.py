@@ -13,6 +13,15 @@ class LoginForm(BaseModel):
     password: Annotated[str, StringConstraints(min_length=8, max_length=50)]
 
 
+class AccessToken(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class AccessTokenData(BaseModel):
+    username: str | None = None
+
+
 class UserBase(BaseModel):
     bio: Annotated[str, StringConstraints(max_length=500)]
     email: EmailStr
