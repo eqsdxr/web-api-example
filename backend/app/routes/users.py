@@ -39,22 +39,25 @@ async def read_multiple_users(
 @router.post("/", response_model=UserResponse)
 def create_user(
     user: UserCreate, conn: Annotated[Connection, Depends(get_db)]
-    ) -> UserResponse:
-    email = conn.execute(select(users_table).where(users_table.c.email == user.email))
-    print(email)
+) -> UserResponse:
+    email = conn.execute(
+        select(users_table).where(users_table.c.email == user.email)
+    )
     if email.first():
         raise HTTPException(409, "This email has already been registered.")
-    username = conn.execute(select(users_table).where(users_table.c.username == user.username))
+    username = conn.execute(
+        select(users_table).where(users_table.c.username == user.username)
+    )
     if username.first():
         raise HTTPException(409, "This username has already been registered.")
     stmt = insert(users_table).values(
-        bio=user.bio, 
+        bio=user.bio,
         created_at=datetime.now(timezone.utc),
         email=user.email,
         id=uuid4(),
         is_activated=False,
-        password_hash=hash_password(user.password), 
-        username=user.username 
+        password_hash=hash_password(user.password),
+        username=user.username,
     )
     conn.execute(stmt)
     conn.commit()
@@ -77,8 +80,8 @@ def update_user(
     return UserResponse(**user_data.model_dump())
 
 
-#@router.delete("/{user_id}", response_model=UserDeleteResponse)
-#def delete_user(
+# @router.delete("/{user_id}", response_model=UserDeleteResponse)
+# def delete_user(
 #    user_id: UUID, conn: Annotated[Connection, Depends(get_db)]
-#) -> UserDeleteResponse:
+# ) -> UserDeleteResponse:
 #    pass

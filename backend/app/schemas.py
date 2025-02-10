@@ -5,12 +5,12 @@ from pydantic import BaseModel, StringConstraints, EmailStr
 
 
 class LoginForm(BaseModel):
-    email: EmailStr | None
-    username: Annotated[
-        str | None, StringConstraints(min_length=4, max_length=50)
-    ]
+    # Does it work well?
+    email_username: (
+        EmailStr
+        | Annotated[str, StringConstraints(min_length=4, max_length=50)]
+    )
     password: Annotated[str, StringConstraints(min_length=8, max_length=50)]
-    model_config = {"extra": "forbid"}
 
 
 class UserBase(BaseModel):
@@ -37,7 +37,9 @@ class UserUpdate(BaseModel):
     bio: Annotated[str, StringConstraints(max_length=500)] | None = None
     email: EmailStr | None = None
     is_activated: bool | None = None
-    password: Annotated[str, StringConstraints(min_length=8, max_length=50)] | None = None
-    username: Annotated[str, StringConstraints(min_length=4, max_length=50)] | None = None
-
-
+    password: (
+        Annotated[str, StringConstraints(min_length=8, max_length=50)] | None
+    ) = None
+    username: (
+        Annotated[str, StringConstraints(min_length=4, max_length=50)] | None
+    ) = None

@@ -20,5 +20,5 @@ users_table = Table(
     Column("id", Uuid, primary_key=True, unique=True),
     Column("is_activated", Boolean, default=False, nullable=False),
     Column("password_hash", Text, nullable=False),
-    Column("username", String(50), index=True, nullable=False, unique=True)
+    Column("username", String(50), index=True, nullable=False, unique=True),
 )
