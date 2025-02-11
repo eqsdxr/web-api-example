@@ -32,6 +32,12 @@ class UserCreate(UserBase):
     password: Annotated[str, StringConstraints(min_length=8, max_length=50)]
 
 
+class UserInternal(UserBase):
+    created_at: datetime
+    is_activated: bool
+    password_hash: str
+
+
 class UserResponse(UserBase):
     created_at: datetime
     is_activated: bool

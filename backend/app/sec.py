@@ -10,7 +10,7 @@ from sqlalchemy import Connection, select
 
 from app.config import main_config
 from app.deps import get_db
-from app.schemas import AccessTokenData
+from app.schemas import AccessTokenData, UserInternal
 from app.models import users_table
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -22,7 +22,7 @@ def authenticate_user(fake_db, username: str, password: str):
     user = get_user_by_username(fake_db, username)
     if not user:
         return False
-    if not verify_password(password, user.hashed_password):
+    if not verify_password(password, user.password_hash):
         return False
     return user
 
@@ -35,12 +35,14 @@ def hash_password(password):
     return pwd_context.hash(password)
 
 
-def get_user_by_username(db_conn: Connection, username: str | None):
+def get_user_by_username(db_conn: Connection, username: str | None) -> UserInternal | None:
     if not username:
         return
-    user = db_conn.execute(select(users_table).where(users_table.c.username == username))
-    if user:
-        return user
+    db_user = db_conn.execute(select(users_table).where(users_table.c.username == username))
+    user = db_user.one_or_none()
+    if not user:
+        return
+    return UserInternal(**user.__dict__)
 
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
