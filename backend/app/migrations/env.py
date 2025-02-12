@@ -22,7 +22,7 @@ from app.models import metadata
 from app.config import main_config
 
 config.set_main_option(
-    "sqlalchemy.url", main_config["database_url_for_alembic"]
+    "sqlalchemy.url", main_config.database_url
 )
 target_metadata = metadata
 

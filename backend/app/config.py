@@ -12,16 +12,15 @@ def get_config():
     """
     env = Env()
     env.read_env(path_to_env, recurse=False)
-    env_data: dict = {
-        "environment": env.str("environment"),
-        "database_url_for_alembic": env.str("database_url_for_alembic"),
-        "database_url": env.str("database_url"),
-        "jwt_secret_key": env.str("jwt_secret_key"),
-        "jwt_algorithm": env.str("jwt_algorithm"),
-        "first_user_username": env.str("first_user_username"),
-        "first_user_password": env.str("first_user_password"),
-        "access_token_duration_hours": env.int("access_token_duration_hours"),
-    }
+    class EnvData:
+        environment: str = env.str("environment")
+        database_url: str = env.str("database_url")
+        jwt_secret_key: str = env.str("jwt_secret_key")
+        jwt_algorithm: str = env.str("jwt_algorithm")
+        first_user_username: str = env.str("first_user_username")
+        first_user_password: str = env.str("first_user_password")
+        access_token_duration_hours: int = env.int("access_token_duration_hours")
+    env_data = EnvData()
     return env_data
 
 
