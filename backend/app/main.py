@@ -6,6 +6,8 @@ from app.routes import main_router
 app = FastAPI()
 
 
+app.include_router(main_router)
+
 origins = [
     "http://localhost",
     "http://localhost:8080",
@@ -21,4 +23,3 @@ app.add_middleware(
 )
 
 
-app.include_router(main_router)
