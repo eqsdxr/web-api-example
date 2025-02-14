@@ -23,7 +23,7 @@ class AccessTokenData(BaseModel):
 
 
 class UserBase(BaseModel):
-    bio: Annotated[str, StringConstraints(max_length=500)]
+    bio: Annotated[str | None, StringConstraints(max_length=500)] = None
     email: EmailStr
     username: Annotated[str, StringConstraints(min_length=4, max_length=50)]
 

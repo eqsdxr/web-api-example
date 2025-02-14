@@ -50,8 +50,7 @@ def create_user(
     )
     if username.first():
         raise HTTPException(409, "This username has already been registered.")
-    stmt = insert(users_table).values(
-        bio=user.bio,
+    stmt = insert(users_table).values( # TODO Add default factory to schemas for some fields
         created_at=datetime.now(timezone.utc),
         email=user.email,
         id=uuid4(),
