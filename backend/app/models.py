@@ -16,7 +16,7 @@ class AccessToken(SQLModel):
     token_type: str = "bearer"
 
 
-class AccessTokenData(SQLModel):
+class AcessTokenPayload(SQLModel):
     username: str | None = None
 
 
@@ -24,8 +24,8 @@ class UserBase(SQLModel):
     bio: str | None = Field(default=None, max_length=1500)
     email: EmailStr
     username: str = Field(min_length=4, max_length=50)
-    is_activated: bool = False
-
+    is_active: bool = False
+    is_superuser: bool = False
 
 class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=50)

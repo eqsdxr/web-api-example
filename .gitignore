@@ -9,4 +9,4 @@ __pycache__
 __init__.py
 .ruff_cache
 
-folder-to-ignore
+folder-to-ignore*
