@@ -1,8 +1,8 @@
 from datetime import datetime, timezone
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from pydantic import EmailStr
-from sqlmodel import UUID, SQLModel, Field
+from sqlmodel import SQLModel, Field
 
 
 class LoginForm(SQLModel):
