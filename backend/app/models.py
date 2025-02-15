@@ -17,7 +17,7 @@ class AccessToken(SQLModel):
 
 
 class AcessTokenPayload(SQLModel):
-    username: str | None = None
+    subject: str | None = None
 
 
 class UserBase(SQLModel):
