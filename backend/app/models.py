@@ -1,24 +1,61 @@
-from sqlalchemy import (
-    MetaData,
-    Table,
-    Column,
-    String,
-    Text,
-    Uuid,
-    DateTime,
-    Boolean,
-)
+from datetime import datetime, timezone
+from uuid import uuid4
 
-metadata = MetaData()
+from pydantic import EmailStr
+from sqlmodel import UUID, SQLModel, Field
 
-users_table = Table(
-    "users_table",
-    metadata,
-    Column("bio", Text, nullable=True),
-    Column("created_at", DateTime, nullable=False),
-    Column("email", String(50), index=True, nullable=False, unique=True),
-    Column("id", Uuid, primary_key=True, unique=True),
-    Column("is_activated", Boolean, default=False, nullable=False),
-    Column("password_hash", Text, nullable=False),
-    Column("username", String(50), index=True, nullable=False, unique=True),
-)
+
+class LoginForm(SQLModel):
+    # Does it work well?
+    email_username: str = Field(min_length=4, max_length=50)
+    password: str = Field(min_length=8, max_length=50)
+
+
+class AccessToken(SQLModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+class AccessTokenData(SQLModel):
+    username: str | None = None
+
+
+class UserBase(SQLModel):
+    bio: str | None = Field(default=None, max_length=1500)
+    email: EmailStr
+    username: str = Field(min_length=4, max_length=50)
+    is_activated: bool = False
+
+
+class UserCreate(UserBase):
+    password: str = Field(min_length=8, max_length=50)
+
+
+class UserInternal(UserBase):
+    created_at: datetime
+    password_hash: str
+
+
+class UserResponse(UserBase):
+    created_at: datetime
+
+
+class MultipleUsersResponse(SQLModel):
+    count: int
+    users: list[UserResponse]
+
+
+class UserUpdate(SQLModel):
+    bio: str | None = Field(default=None, max_length=1500)
+    email: EmailStr | None = None
+    is_activated: bool | None = None
+    password: str | None = Field(default=None, min_length=8, max_length=50)
+    username: str | None = Field(default=None, min_length=8, max_length=1500)
+
+
+class UsersTable(UserBase, table=True):
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    password_hash: str
+    username: str = Field(index=True)
+
