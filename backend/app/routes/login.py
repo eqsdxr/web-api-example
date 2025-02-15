@@ -1,35 +1,41 @@
 from datetime import timedelta
-from typing import Annotated
+from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app.config import main_config
-from app.schemas import AccessToken
+from app.models import AccessToken, UserResponse
+from app.sec import create_access_token
+from app.deps import CurrentUser, SessionDep
+from app.crud import authenticate
 
 router = APIRouter(prefix="/login", tags=["login"])
 
 
 @router.post("/", response_model=AccessToken)
 async def login(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    session: SessionDep, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ) -> AccessToken:
-    user = authenticate_user(
-        fake_users_db, form_data.username, form_data.password
+    user = authenticate(
+        session=session, email=form_data.username, password=form_data.password
     )
     if not user:
-        raise HTTPException(
-            status_code=401,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
+        raise HTTPException(status_code=400, detail="Incorrect email or password")
+    elif not user.is_active:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    access_token_expires = timedelta(minutes=main_config.access_token_duration_hours)
+    return AccessToken(
+        access_token=create_access_token(
+            user.id, expires_delta=access_token_expires
         )
-    access_token_expires = timedelta(
-        minutes=main_config["access_token_duration_hours"]
     )
-    access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
-    )
-    return AccessToken(access_token=access_token, token_type="bearer")
+
+
+@router.post("/login/test-token", response_model=UserResponse)
+def test_token(current_user: CurrentUser) -> Any:
+    return current_user
+
 
 
 # @router.post("/", response_model=)
