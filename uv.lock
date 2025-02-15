@@ -39,39 +39,6 @@ wheels = [
 ]
 
 [[package]]
-name = "backend"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "alembic" },
-    { name = "environs" },
-    { name = "fastapi", extra = ["standard"] },
-    { name = "httpx" },
-    { name = "passlib", extra = ["bcrypt"] },
-    { name = "psycopg", extra = ["binary", "pool"] },
-    { name = "psycopg2-binary" },
-    { name = "pyjwt" },
-    { name = "pytest" },
-    { name = "sqlalchemy" },
-    { name = "sqlmodel" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "alembic", specifier = ">=1.14.1" },
-    { name = "environs", specifier = ">=14.1.0" },
-    { name = "fastapi", extras = ["standard"], specifier = ">=0.115.7" },
-    { name = "httpx", specifier = ">=0.28.1" },
-    { name = "passlib", extras = ["bcrypt"], specifier = ">=1.7.4" },
-    { name = "psycopg", extras = ["binary", "pool"], specifier = ">=3.2.4" },
-    { name = "psycopg2-binary", specifier = ">=2.9.10" },
-    { name = "pyjwt", specifier = ">=2.10.1" },
-    { name = "pytest", specifier = ">=8.3.4" },
-    { name = "sqlalchemy", specifier = ">=2.0.37" },
-    { name = "sqlmodel", specifier = ">=0.0.22" },
-]
-
-[[package]]
 name = "bcrypt"
 version = "4.2.1"
 source = { registry = "https://pypi.org/simple" }
@@ -978,6 +945,39 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/f2/e1/0025d365cf6248c4d1ee4c3d2e3d373bdd3f6aff78ba4298f97b4fad2740/watchfiles-1.0.4-cp313-cp313-musllinux_1_1_x86_64.whl", hash = "sha256:308ac265c56f936636e3b0e3f59e059a40003c655228c131e1ad439957592303", size = 611911 },
     { url = "https://files.pythonhosted.org/packages/55/55/035838277d8c98fc8c917ac9beeb0cd6c59d675dc2421df5f9fcf44a0070/watchfiles-1.0.4-cp313-cp313-win32.whl", hash = "sha256:aee397456a29b492c20fda2d8961e1ffb266223625346ace14e4b6d861ba9c80", size = 271152 },
     { url = "https://files.pythonhosted.org/packages/f0/e5/96b8e55271685ddbadc50ce8bc53aa2dff278fb7ac4c2e473df890def2dc/watchfiles-1.0.4-cp313-cp313-win_amd64.whl", hash = "sha256:d6097538b0ae5c1b88c3b55afa245a66793a8fec7ada6755322e465fb1a0e8cc", size = 285216 },
+]
+
+[[package]]
+name = "web-api"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "alembic" },
+    { name = "environs" },
+    { name = "fastapi", extra = ["standard"] },
+    { name = "httpx" },
+    { name = "passlib", extra = ["bcrypt"] },
+    { name = "psycopg", extra = ["binary", "pool"] },
+    { name = "psycopg2-binary" },
+    { name = "pyjwt" },
+    { name = "pytest" },
+    { name = "sqlalchemy" },
+    { name = "sqlmodel" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "alembic", specifier = ">=1.14.1" },
+    { name = "environs", specifier = ">=14.1.0" },
+    { name = "fastapi", extras = ["standard"], specifier = ">=0.115.7" },
+    { name = "httpx", specifier = ">=0.28.1" },
+    { name = "passlib", extras = ["bcrypt"], specifier = ">=1.7.4" },
+    { name = "psycopg", extras = ["binary", "pool"], specifier = ">=3.2.4" },
+    { name = "psycopg2-binary", specifier = ">=2.9.10" },
+    { name = "pyjwt", specifier = ">=2.10.1" },
+    { name = "pytest", specifier = ">=8.3.4" },
+    { name = "sqlalchemy", specifier = ">=2.0.37" },
+    { name = "sqlmodel", specifier = ">=0.0.22" },
 ]
 
 [[package]]

@@ -16,7 +16,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
   backend:
-    build: backend/
+    build: .
     ports:
       - "8000:8000"
     depends_on:
@@ -27,11 +27,11 @@ services:
       watch:
         - action: sync
           path: .
-          target: backend
+          target: .
           ignore:
-            - backend/.venv/
+            - .venv/
         - action: rebuild
-          path: ./backend/uv.lock
+          path: uv.lock
 networks:
   my_network:
     driver: bridge
