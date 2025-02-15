@@ -37,6 +37,7 @@ class UserInternal(UserBase):
 
 
 class UserResponse(UserBase):
+    id: UUID
     created_at: datetime
 
 
