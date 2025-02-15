@@ -1,13 +1,13 @@
 from datetime import timedelta
-from typing import Annotated, Any
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app.config import main_config
-from app.models import AccessToken, UserResponse
+from app.models import AccessToken
 from app.sec import create_access_token
-from app.deps import CurrentUser, SessionDep
+from app.deps import SessionDep
 from app.crud import authenticate
 
 router = APIRouter(prefix="/login", tags=["login"])
@@ -19,7 +19,7 @@ async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> AccessToken:
     user = authenticate(
-        session=session, email=form_data.username, password=form_data.password
+        session=session, email_or_username=form_data.username, password=form_data.password
     )
     if not user:
         raise HTTPException(
@@ -35,11 +35,6 @@ async def login(
             user.id, expires_delta=access_token_expires
         )
     )
-
-
-@router.post("/login/test-token", response_model=UserResponse)
-def test_token(current_user: CurrentUser) -> Any:
-    return current_user
 
 
 # @router.post("/", response_model=)

@@ -5,7 +5,7 @@ from fastapi import APIRouter, Query
 from sqlmodel import select, func
 
 from app.deps import SessionDep
-from app.models import UserCreate, UsersTable
+from app.models import UserCreate, UsersTable, UserResponse
 from app.crud import get_user_by_email, create_user, get_user_by_username
 
 router = APIRouter(prefix="/development", tags=["development"])
@@ -23,11 +23,18 @@ async def check_database_connection(session: SessionDep):
     return {"amount_of_users_in_system": count}
 
 
+@router.post("/create-superuser")
+async def create_superuser(session: SessionDep, user: UserCreate):
+    user.is_active = True
+    created_user = create_user(session=session, user_create=user)
+    return UserResponse(**created_user.model_dump())
+
+
 @router.post("/seed-users")
 async def seed_users_database(
     session: SessionDep,
     amount_of_users: Annotated[int, Query(gt=0, lt=50)] = 1,
-):
+) -> str:
     seeded_count = 0
 
     for _ in range(amount_of_users):
