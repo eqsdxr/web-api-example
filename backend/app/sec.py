@@ -8,10 +8,15 @@ from app.config import main_config
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
 def create_access_token(subject: str | Any, expires_delta: timedelta) -> str:
     expire = datetime.now(timezone.utc) + expires_delta
     to_encode = {"exp": expire, "subject": str(subject)}
-    encoded_jwt = jwt.encode(to_encode, main_config.jwt_secret_key, algorithm=main_config.jwt_algorithm)
+    encoded_jwt = jwt.encode(
+        to_encode,
+        main_config.jwt_secret_key,
+        algorithm=main_config.jwt_algorithm,
+    )
     return encoded_jwt
 
 

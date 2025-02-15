@@ -6,7 +6,6 @@ from sqlmodel import UUID, SQLModel, Field
 
 
 class LoginForm(SQLModel):
-    # Does it work well?
     email_username: str = Field(min_length=4, max_length=50)
     password: str = Field(min_length=8, max_length=50)
 
@@ -26,6 +25,7 @@ class UserBase(SQLModel):
     username: str = Field(min_length=4, max_length=50)
     is_active: bool = False
     is_superuser: bool = False
+
 
 class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=50)
@@ -54,7 +54,9 @@ class UserUpdate(SQLModel):
 
 
 class UsersTable(UserBase, table=True):
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc)
+    )
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     password_hash: str
     username: str = Field(index=True)

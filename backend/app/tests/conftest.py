@@ -9,9 +9,10 @@ from app.main import app
 
 @fixture(scope="session")
 def db() -> Generator[Connection, None, None]:
-    with Connection(engine) as conn: # TODO - Which engine should I put here?
-        #init_db(session)
+    with Connection(engine) as conn:  # TODO - Which engine should I put here?
+        # init_db(session)
         yield session
+
 
 @fixture(scope="module")
 def client() -> Generator[TestClient, None, None]:

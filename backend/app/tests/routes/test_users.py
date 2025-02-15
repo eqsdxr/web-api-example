@@ -8,6 +8,6 @@ def test_create_users(client: TestClient):
             "email": "test@test.com",
             "username": "testusername",
             "password": "testtest",
-        }
+        },
     )
     assert response.status_code == 200

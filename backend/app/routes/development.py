@@ -1,44 +1,51 @@
-from random import randint
-from datetime import datetime, timezone
 from typing import Annotated
-from uuid import uuid4
+import secrets
 
-from fastapi import APIRouter, Depends, Query
-from sqlalchemy import Connection, text, insert
+from fastapi import APIRouter, Query
+from sqlmodel import select, func
 
-from app.deps import get_db
-from app.sec import hash_password
-from app.models import users_table
+from app.deps import SessionDep
+from app.models import UserCreate, UsersTable
+from app.crud import get_user_by_email, create_user, get_user_by_username
 
 router = APIRouter(prefix="/development", tags=["development"])
 
 
-@router.get("/check")
-def check_api():
+@router.get("/check-api")
+async def check_api():
     return "OK"
 
 
-@router.get("/database")
-def check_database_connection(conn: Annotated[Connection, Depends(get_db)]):
-    result = conn.execute(text("SELECT * FROM users_table;"))
-    return {"something": [dict(row) for row in result.mappings()]}
+@router.get("/check-db")
+async def check_database_connection(session: SessionDep):
+    count_statement = select(func.count()).select_from(UsersTable)
+    count = session.exec(count_statement).one()
+    return {"amount_of_users_in_system": count}
 
 
-@router.post("/seed")
-def seed_users_database(
-    conn: Annotated[Connection, Depends(get_db)],
-    amount_of_users: Annotated[int, Query(gt=-1, lt=200)] = 0,
-) -> str | None:
+@router.post("/seed-users")
+async def seed_users_database(
+    session: SessionDep,
+    amount_of_users: Annotated[int, Query(gt=0, lt=50)] = 1,
+):
+    seeded_count = 0
+
     for _ in range(amount_of_users):
-        rn = randint(100000, 10000000)
-        stmt = insert(users_table).values( # TODO Add default factory to schemas for some fields
-            created_at=datetime.now(timezone.utc),
-            email=f"user{rn}@example.com",
-            id=uuid4(),
-            is_activated=False,
-            password_hash=hash_password("password"),
-            username=f"user{rn}"
+        while True:
+            rn = secrets.randbelow(10_000_000)
+            email = f"random{rn}@seeded.com"
+            username = f"user{rn}"
+
+            if not get_user_by_email(session, email) and not get_user_by_username(session, username):
+                break
+
+        random_user = UserCreate(
+            email=email,
+            username=username,
+            password="password",
         )
-        conn.execute(stmt)
-    conn.commit()
-    return f"{amount_of_users} users were seeded into database."
+        create_user(session=session, user_create=random_user)
+        seeded_count += 1
+
+    return f"{seeded_count} users were seeded into the database"
+

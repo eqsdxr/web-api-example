@@ -15,16 +15,21 @@ router = APIRouter(prefix="/login", tags=["login"])
 
 @router.post("/", response_model=AccessToken)
 async def login(
-    session: SessionDep, form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
+    session: SessionDep,
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> AccessToken:
     user = authenticate(
         session=session, email=form_data.username, password=form_data.password
     )
     if not user:
-        raise HTTPException(status_code=400, detail="Incorrect email or password")
+        raise HTTPException(
+            status_code=400, detail="Incorrect email or password"
+        )
     elif not user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
-    access_token_expires = timedelta(minutes=main_config.access_token_duration_hours)
+    access_token_expires = timedelta(
+        minutes=main_config.access_token_duration_hours
+    )
     return AccessToken(
         access_token=create_access_token(
             user.id, expires_delta=access_token_expires
@@ -35,7 +40,6 @@ async def login(
 @router.post("/login/test-token", response_model=UserResponse)
 def test_token(current_user: CurrentUser) -> Any:
     return current_user
-
 
 
 # @router.post("/", response_model=)

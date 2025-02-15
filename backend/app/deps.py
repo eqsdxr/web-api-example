@@ -11,25 +11,26 @@ from sqlmodel import Session, create_engine
 from app.config import main_config
 from app.models import AcessTokenPayload, UsersTable
 
-reusable_oauth2 = OAuth2PasswordBearer(
-    tokenUrl="api/login/access-token"
-)
+reusable_oauth2 = OAuth2PasswordBearer(tokenUrl="api/login/access-token")
 
 engine = create_engine(main_config.database_url, echo=True)
 
-def get_db() -> Generator[Session, None, None]:
+
+def get_db_session() -> Generator[Session, None, None]:
     with Session(engine) as session:
         yield session
 
 
-SessionDep = Annotated[Session, Depends(get_db)]
+SessionDep = Annotated[Session, Depends(get_db_session)]
 TokenDep = Annotated[str, Depends(reusable_oauth2)]
 
 
 def get_current_user(session: SessionDep, token: TokenDep) -> UsersTable:
     try:
         payload = jwt.decode(
-            token, main_config.jwt_secret_key, algorithms=[main_config.jwt_algorithm]
+            token,
+            main_config.jwt_secret_key,
+            algorithms=[main_config.jwt_algorithm],
         )
         token_data = AcessTokenPayload(**payload)
     except (InvalidTokenError, ValidationError):
