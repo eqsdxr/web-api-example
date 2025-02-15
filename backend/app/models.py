@@ -59,3 +59,6 @@ class UsersTable(UserBase, table=True):
     password_hash: str
     username: str = Field(index=True)
 
+
+class Message(SQLModel):
+    text: str
