@@ -10,3 +10,5 @@ __init__.py
 .ruff_cache
 
 folder-to-ignore*
+
+uv.lock
