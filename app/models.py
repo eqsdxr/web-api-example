@@ -49,7 +49,7 @@ class MultipleUsersResponse(SQLModel):
 class UserUpdate(SQLModel):
     bio: str | None = Field(default=None, max_length=1500)
     email: EmailStr | None = None
-    is_activated: bool | None = None
+    is_active: bool | None = None
     password: str | None = Field(default=None, min_length=8, max_length=50)
     username: str | None = Field(default=None, min_length=8, max_length=1500)
 
