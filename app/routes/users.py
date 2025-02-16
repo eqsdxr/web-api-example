@@ -76,7 +76,7 @@ def read_user_by_id(
     dependencies=[Depends(get_current_active_superuser)],
     response_model=UserResponse,
 )
-def update_user(
+def patch_user(
     *,
     session: SessionDep,
     user_id: UUID,
@@ -88,19 +88,35 @@ def update_user(
             status_code=404,
             detail="The user with this id does not exist in the system",
         )
+    #  TODO  Remove this terrible code
     if user_in.email:
         existing_user = crud.get_user_by_email(
             session=session, email=user_in.email
         )
         if existing_user and existing_user.id != user_id:
             raise HTTPException(
+                status_code=409, detail="This email is already assigned to this user"
+            )
+        if existing_user:
+            raise HTTPException(
                 status_code=409, detail="User with this email already exists"
             )
-
-    db_user = crud.update_user(
-        session=session, db_user=db_user, user_in=user_in
+    if user_in.username:
+        existing_user = crud.get_user_by_username(
+            session=session, username=user_in.username
+        )
+        if existing_user and existing_user.id != user_id:
+            raise HTTPException(
+                status_code=409, detail="This username is already assigned to this user"
+            )
+        if existing_user:
+            raise HTTPException(
+                status_code=409, detail="User with this username already exists"
+            )
+    updated_user = crud.update_user(
+        session=session, stored_user=db_user, user=user_in
     )
-    return db_user
+    return updated_user
 
 
 @router.delete(

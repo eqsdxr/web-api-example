@@ -18,18 +18,17 @@ def create_user(*, session: Session, user_create: UserCreate) -> UsersTable:
 
 
 def update_user(
-    *, session: Session, db_user: UsersTable, user_in: UserUpdate
+    *, session: Session, stored_user: UsersTable, user: UserUpdate
 ) -> Any:
-    user_data = user_in.model_dump(exclude_unset=True)
+    user_data = user.model_dump(exclude_unset=True, exclude_none=True)
     extra_data = {}
-    if user_in.password:
-        hashed_password = get_password_hash(user_in.password)
-        extra_data["password_hash"] = hashed_password
-    db_user.sqlmodel_update(user_data, update=extra_data)
-    session.add(db_user)
+    if "password" in user_data:
+        extra_data["password_hash"] = get_password_hash(user_data["password"])
+    stored_user.sqlmodel_update(user_data, update=extra_data)
+    session.add(stored_user)
     session.commit()
-    session.refresh(db_user)
-    return db_user
+    session.refresh(stored_user)
+    return stored_user
 
 
 def get_user_by_email(session: Session, email: str) -> UsersTable | None:
