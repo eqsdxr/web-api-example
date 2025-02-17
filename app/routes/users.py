@@ -52,7 +52,7 @@ def create_user(*, session: SessionDep, user_in: UserCreate) -> Any:
             detail="The user with this email already exists in the system.",
         )
 
-    created_user = crud.create_user(session=session, user_create=user_in)
+    created_user = crud.create_db_user(session=session, user_create=user_in)
     return UserResponse(**created_user.model_dump())
 
 

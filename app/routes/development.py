@@ -5,8 +5,8 @@ from fastapi import APIRouter, Query
 from sqlmodel import select, func
 
 from app.deps import SessionDep
-from app.models import UserCreate, UsersTable
-from app.crud import get_user_by_email, create_user, get_user_by_username
+from app.models import UserCreate, UsersTable, UserResponse
+from app.crud import get_user_by_email, create_db_user, get_user_by_username
 
 router = APIRouter(prefix="/development", tags=["development"])
 
@@ -23,11 +23,12 @@ async def check_database_connection(session: SessionDep):
     return {"amount_of_users_in_system": count}
 
 
-@router.post("/create-superuser")
-async def create_superuser(session: SessionDep, user: UserCreate):
-    user.is_active = True
-    created_user = create_user(session=session, user_create=user)
-    return "Superuser was created successfully"
+@router.post("/create-user")
+async def create_user(session: SessionDep, user: UserCreate, superuser=False):
+    user.is_superuser = superuser
+    user.is_active = True # Should I remove this field completely?
+    created_user = create_db_user(session=session, user_create=user)
+    return UserResponse(**created_user.model_dump())
 
 
 @router.post("/seed-users")
@@ -51,7 +52,7 @@ async def seed_users_database(
             username=username,
             password="password",
         )
-        create_user(session=session, user_create=random_user)
+        create_db_user(session=session, user_create=random_user)
         seeded_count += 1
 
     return f"{seeded_count} users were seeded into the database"

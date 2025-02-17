@@ -6,7 +6,7 @@ from app.sec import get_password_hash, verify_password
 from app.models import UsersTable, UserCreate, UserUpdate
 
 
-def create_user(*, session: Session, user_create: UserCreate) -> UsersTable:
+def create_db_user(*, session: Session, user_create: UserCreate) -> UsersTable:
     db_obj = UsersTable.model_validate(
         user_create,
         update={"password_hash": get_password_hash(user_create.password)},
