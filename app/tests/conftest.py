@@ -1,17 +1,17 @@
 from collections.abc import Generator
 
 from pytest import fixture
-from sqlmodel import Session
+from sqlmodel import Session, create_engine
 from fastapi.testclient import TestClient
 
-from app.db import engine
 from app.main import app
 from app.tests.utils import get_first_user_token_headers
 
+test_engine = create_engine("sqlite:///memory", echo=True)
 
 @fixture(scope="session", autouse=True)
 def db() -> Generator[Session, None, None]:
-    with Session(engine) as session:
+    with Session(test_engine) as session:
         yield session
 
 

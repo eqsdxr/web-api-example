@@ -14,7 +14,7 @@ def random_email() -> str:
     return f"{random_lower_string()}@{random_lower_string()}.com"
 
 
-def get_superuser_token_headers(client: TestClient) -> dict[str, str]:
+def get_first_user_token_headers(client: TestClient) -> dict[str, str]:
     login_data = {
         "email": main_config.first_user_email,
         "username": main_config.first_user_username,
