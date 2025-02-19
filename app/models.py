@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from uuid import UUID, uuid4
 
 from pydantic import EmailStr
-from sqlmodel import SQLModel, Field
+from sqlmodel import Field, SQLModel
 
 
 class LoginForm(SQLModel):

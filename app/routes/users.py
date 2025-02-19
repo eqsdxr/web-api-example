@@ -5,18 +5,18 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import func, select
 
 from app import crud
-from app.models import (
-    MultipleUsersResponse,
-    UserCreate,
-    UserResponse,
-    UserUpdate,
-    Message,
-    UsersTable,
-)
 from app.deps import (
     CurrentUser,
     SessionDep,
     get_current_active_superuser,
+)
+from app.models import (
+    Message,
+    MultipleUsersResponse,
+    UserCreate,
+    UserResponse,
+    UsersTable,
+    UserUpdate,
 )
 
 router = APIRouter(prefix="/users", tags=["users"])

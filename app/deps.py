@@ -7,8 +7,8 @@ from jwt.exceptions import InvalidTokenError
 from pydantic import ValidationError
 from sqlmodel import Session
 
-from app.config import main_config
 from app.models import AcessTokenPayload, UsersTable
+from app.config import main_config
 from app.db import get_db_session
 
 # Should be the same as login endpoint

@@ -8,7 +8,7 @@ def test_login(client: TestClient) -> None:
         "username": main_config.first_user_username,
         "password": main_config.first_user_password,
     }
-    r = client.post("api/login/", data=login_data)
+    r = client.post("api/login/access-token", data=login_data)
     tokens = r.json()
     assert r.status_code == 200
     assert "access_token" in tokens

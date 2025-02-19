@@ -2,8 +2,8 @@ from typing import Any
 
 from sqlmodel import Session, select
 
+from app.models import UserCreate, UsersTable, UserUpdate
 from app.sec import get_password_hash, verify_password
-from app.models import UsersTable, UserCreate, UserUpdate
 
 
 def create_db_user(*, session: Session, user_create: UserCreate) -> UsersTable:

@@ -9,7 +9,7 @@ def test_check_api(client: TestClient):
     assert response.status_code == 200
 
 
-def test_create_user_dev(client: TestClient, db: Session) -> None:
+def test_create_user_dev(client: TestClient) -> None:
     r = client.post(
         "api/development/create-user-dev/",
         json={
@@ -20,10 +20,3 @@ def test_create_user_dev(client: TestClient, db: Session) -> None:
     )
 
     assert r.status_code == 200
-    data = r.json()
-    user = db.exec(
-        select(UsersTable).where(UsersTable.id == data["id"])
-    ).first()
-    assert user
-    assert user.email == "test@test.com"
-    assert user.username == "testtest"

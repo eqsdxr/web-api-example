@@ -1,4 +1,5 @@
 from functools import lru_cache
+
 from environs import Env
 
 path_to_env = ".env"

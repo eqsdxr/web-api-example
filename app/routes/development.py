@@ -1,12 +1,12 @@
-from typing import Annotated
 import secrets
+from typing import Annotated
 
 from fastapi import APIRouter, Query
-from sqlmodel import select, func
+from sqlmodel import func, select
 
+from app.crud import create_db_user, get_user_by_email, get_user_by_username
 from app.deps import SessionDep
-from app.models import UserCreate, UsersTable, UserResponse
-from app.crud import get_user_by_email, create_db_user, get_user_by_username
+from app.models import UserCreate, UserResponse, UsersTable
 
 router = APIRouter(prefix="/development", tags=["development"])
 
