@@ -13,4 +13,3 @@ def test_login(client: TestClient) -> None:
     assert r.status_code == 200
     assert "access_token" in tokens
     assert tokens["access_token"]
-

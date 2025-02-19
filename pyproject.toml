@@ -16,3 +16,8 @@ dependencies = [
 
 [tool.ruff]
 line-length=79
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.1.0",
+]

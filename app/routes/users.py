@@ -95,7 +95,8 @@ def patch_user(
         )
         if existing_user and existing_user.id != user_id:
             raise HTTPException(
-                status_code=409, detail="This email is already assigned to this user"
+                status_code=409,
+                detail="This email is already assigned to this user",
             )
         if existing_user:
             raise HTTPException(
@@ -107,11 +108,13 @@ def patch_user(
         )
         if existing_user and existing_user.id != user_id:
             raise HTTPException(
-                status_code=409, detail="This username is already assigned to this user"
+                status_code=409,
+                detail="This username is already assigned to this user",
             )
         if existing_user:
             raise HTTPException(
-                status_code=409, detail="User with this username already exists"
+                status_code=409,
+                detail="User with this username already exists",
             )
     updated_user = crud.update_user(
         session=session, stored_user=db_user, user=user_in

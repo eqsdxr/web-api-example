@@ -7,7 +7,8 @@ from fastapi.testclient import TestClient
 from app.main import app
 from app.tests.utils import get_first_user_token_headers
 
-test_engine = create_engine("sqlite:///memory", echo=True)
+test_engine = create_engine("sqlite:///:memory:", echo=True)
+
 
 @fixture(scope="session", autouse=True)
 def db() -> Generator[Session, None, None]:
@@ -24,4 +25,3 @@ def client() -> Generator[TestClient, None, None]:
 @fixture(scope="module")
 def superuser_token_headers(client: TestClient) -> dict[str, str]:
     return get_first_user_token_headers(client)
-

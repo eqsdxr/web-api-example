@@ -49,7 +49,9 @@ def authenticate(
     if "@" in email_or_username:
         db_user = get_user_by_email(session=session, email=email_or_username)
     else:
-        db_user = get_user_by_username(session=session, username=email_or_username)
+        db_user = get_user_by_username(
+            session=session, username=email_or_username
+        )
     if not db_user:
         return None
     if not verify_password(password, db_user.password_hash):

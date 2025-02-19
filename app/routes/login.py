@@ -19,7 +19,9 @@ async def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> AccessToken:
     user = authenticate(
-        session=session, email_or_username=form_data.username, password=form_data.password
+        session=session,
+        email_or_username=form_data.username,
+        password=form_data.password,
     )
     if not user:
         raise HTTPException(
