@@ -45,7 +45,9 @@ def read_users(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
     response_model=UserResponse,
 )
 def create_user(*, session: SessionDep, user_in: UserCreate) -> Any:
-    user = crud.get_user_by_username(session=session, username=user_in.username)
+    user = crud.get_user_by_username(
+        session=session, username=user_in.username
+    )
     if user:
         raise HTTPException(
             status_code=400,

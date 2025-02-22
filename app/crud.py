@@ -44,9 +44,7 @@ def get_user_by_username(session: Session, username: str) -> UsersTable | None:
 def authenticate(
     *, session: Session, username: str, password: str
 ) -> UsersTable | None:
-    db_user = get_user_by_username(
-            session=session, username=username
-        )
+    db_user = get_user_by_username(session=session, username=username)
     if not db_user:
         return None
     if not verify_password(password, db_user.password_hash):
