@@ -27,8 +27,6 @@ async def login(
         raise HTTPException(
             status_code=400, detail="Incorrect email or password"
         )
-    elif not user.is_active:
-        raise HTTPException(status_code=400, detail="Inactive user")
     access_token_expires = timedelta(
         minutes=main_config.access_token_duration_hours
     )

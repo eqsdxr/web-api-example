@@ -28,7 +28,6 @@ async def create_user_dev(
     session: SessionDep, user: UserCreate, superuser=False
 ):
     user.is_superuser = superuser
-    user.is_active = True
     created_user = create_db_user(session=session, user_create=user)
     return UserResponse(**created_user.model_dump())
 

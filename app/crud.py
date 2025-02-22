@@ -7,6 +7,12 @@ from app.models import UserCreate, UsersTable, UserUpdate
 from app.sec import get_password_hash, verify_password
 
 
+def get_user_by_username(session: Session, username: str) -> UsersTable | None:
+    statement = select(UsersTable).where(UsersTable.username == username)
+    user = session.exec(statement).first()
+    return user
+
+
 def create_db_user(*, session: Session, user_create: UserCreate) -> UsersTable:
     user = get_user_by_username(session, user_create.username)
     if user:
@@ -33,12 +39,6 @@ def update_user(
     session.commit()
     session.refresh(stored_user)
     return stored_user
-
-
-def get_user_by_username(session: Session, username: str) -> UsersTable | None:
-    statement = select(UsersTable).where(UsersTable.username == username)
-    user = session.exec(statement).first()
-    return user
 
 
 def authenticate(

@@ -7,9 +7,8 @@ def test_create_user(
     response = client.post(
         url="api/users/",
         json={
-            "email": "test@test.com",
-            "username": "testusername",
-            "password": "testpassword",
+            "username": "adlkfjdafj",
+            "password": "kljadskfoih",
         },
         headers=superuser_token_headers,
     )

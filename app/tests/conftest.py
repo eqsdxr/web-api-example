@@ -2,45 +2,22 @@ from collections.abc import Generator
 
 from fastapi.testclient import TestClient
 from pytest import fixture
-from sqlmodel import Session, create_engine, SQLModel, delete
+from sqlmodel import Session, delete
 
 from app.main import app
 from app.tests.utils import get_first_user_token_headers
-from app.db import get_db_session
+from app.db import engine, init_db
 from app import models
-from app.config import main_config
-from app.sec import get_password_hash
-
-test_db = "postgresql+psycopg://postgres:root@localhost/postgres"
-
-test_engine = create_engine(test_db)
 
 
-def create_db_and_tables(engine):
-    SQLModel.metadata.create_all(engine)
-
-
-def create_first_user(session):
-    test_user = models.UsersTable(
-        username=main_config.first_user_username,
-        password_hash=get_password_hash(main_config.first_user_password),
-        is_active=True,
-    )
-    session.add(test_user)
-    session.commit()
-
-
-def override_get_db_session() -> Generator[Session, None, None]:
-    create_db_and_tables(test_engine)
-    with Session(test_engine) as session:
-        create_first_user(session)
+@fixture(scope="session", autouse=True)
+def db() -> Generator[Session, None, None]:  # Use for direct db operations
+    with Session(engine) as session:
+        init_db(engine, create_superuser=True)
         yield session
         statement = delete(models.UsersTable)
         session.execute(statement)
         session.commit()
-
-
-app.dependency_overrides[get_db_session] = override_get_db_session
 
 
 @fixture(scope="module")
