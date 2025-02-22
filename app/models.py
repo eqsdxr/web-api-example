@@ -21,7 +21,6 @@ class AcessTokenPayload(SQLModel):
 class UserBase(SQLModel):
     bio: str | None = Field(default=None, max_length=1500)
     username: str = Field(min_length=4, max_length=50)
-    is_active: bool = False
     is_superuser: bool = False
 
 
@@ -46,7 +45,6 @@ class MultipleUsersResponse(SQLModel):
 
 class UserUpdate(SQLModel):
     bio: str | None = Field(default=None, max_length=1500)
-    is_active: bool | None = None
     password: str | None = Field(default=None, min_length=8, max_length=50)
     username: str | None = Field(default=None, min_length=8, max_length=1500)
 
