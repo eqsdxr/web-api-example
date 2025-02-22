@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import APIRouter, Query
 from sqlmodel import func, select
 
-from app.crud import create_db_user, get_user_by_email, get_user_by_username
+from app.crud import create_db_user, get_user_by_username
 from app.deps import SessionDep
 from app.models import UserCreate, UserResponse, UsersTable
 
@@ -28,7 +28,7 @@ async def create_user_dev(
     session: SessionDep, user: UserCreate, superuser=False
 ):
     user.is_superuser = superuser
-    user.is_active = True  # Should I remove this field completely?
+    user.is_active = True
     created_user = create_db_user(session=session, user_create=user)
     return UserResponse(**created_user.model_dump())
 
@@ -43,16 +43,12 @@ async def seed_users_database(
     for _ in range(amount_of_users):
         while True:
             rn = secrets.randbelow(10_000_000)
-            email = f"random{rn}@seeded.com"
             username = f"user{rn}"
 
-            if not get_user_by_email(
-                session, email
-            ) and not get_user_by_username(session, username):
+            if not get_user_by_username(session, username):
                 break
 
         random_user = UserCreate(
-            email=email,
             username=username,
             password="password",
         )

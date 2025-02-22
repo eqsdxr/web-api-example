@@ -45,7 +45,7 @@ def read_users(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
     response_model=UserResponse,
 )
 def create_user(*, session: SessionDep, user_in: UserCreate) -> Any:
-    user = crud.get_user_by_email(session=session, email=user_in.email)
+    user = crud.get_user_by_username(session=session, username=user_in.username)
     if user:
         raise HTTPException(
             status_code=400,
@@ -89,19 +89,6 @@ def patch_user(
             detail="The user with this id does not exist in the system",
         )
     #  TODO  Remove this terrible code
-    if user_in.email:
-        existing_user = crud.get_user_by_email(
-            session=session, email=user_in.email
-        )
-        if existing_user and existing_user.id != user_id:
-            raise HTTPException(
-                status_code=409,
-                detail="This email is already assigned to this user",
-            )
-        if existing_user:
-            raise HTTPException(
-                status_code=409, detail="User with this email already exists"
-            )
     if user_in.username:
         existing_user = crud.get_user_by_username(
             session=session, username=user_in.username

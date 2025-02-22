@@ -21,7 +21,6 @@ def get_config():
         jwt_algorithm: str = env.str("jwt_algorithm")
         first_user_username: str = env.str("first_user_username")
         first_user_password: str = env.str("first_user_password")
-        first_user_email: str = env.str("first_user_email")
         access_token_duration_hours: int = env.int(
             "access_token_duration_hours"
         )

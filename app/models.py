@@ -1,12 +1,11 @@
 from datetime import datetime, timezone
 from uuid import UUID, uuid4
 
-from pydantic import EmailStr
 from sqlmodel import Field, SQLModel
 
 
 class LoginForm(SQLModel):
-    email_username: str = Field(min_length=4, max_length=50)
+    username: str = Field(min_length=4, max_length=50)
     password: str = Field(min_length=8, max_length=50)
 
 
@@ -21,7 +20,6 @@ class AcessTokenPayload(SQLModel):
 
 class UserBase(SQLModel):
     bio: str | None = Field(default=None, max_length=1500)
-    email: EmailStr
     username: str = Field(min_length=4, max_length=50)
     is_active: bool = False
     is_superuser: bool = False
@@ -48,7 +46,6 @@ class MultipleUsersResponse(SQLModel):
 
 class UserUpdate(SQLModel):
     bio: str | None = Field(default=None, max_length=1500)
-    email: EmailStr | None = None
     is_active: bool | None = None
     password: str | None = Field(default=None, min_length=8, max_length=50)
     username: str | None = Field(default=None, min_length=8, max_length=1500)
@@ -60,7 +57,7 @@ class UsersTable(UserBase, table=True):
     )
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     password_hash: str
-    username: str = Field(index=True)
+    username: str = Field(index=True, unique=True, nullable=False)
 
 
 class Message(SQLModel):

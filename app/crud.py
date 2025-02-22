@@ -1,5 +1,6 @@
 from typing import Any
 
+from fastapi import HTTPException
 from sqlmodel import Session, select
 
 from app.models import UserCreate, UsersTable, UserUpdate
@@ -7,6 +8,9 @@ from app.sec import get_password_hash, verify_password
 
 
 def create_db_user(*, session: Session, user_create: UserCreate) -> UsersTable:
+    user = get_user_by_username(session, user_create.username)
+    if user:
+        raise HTTPException(400, "User with this email is already registered")
     db_obj = UsersTable.model_validate(
         user_create,
         update={"password_hash": get_password_hash(user_create.password)},
@@ -31,26 +35,17 @@ def update_user(
     return stored_user
 
 
-def get_user_by_email(session: Session, email: str) -> UsersTable | None:
-    statement = select(UsersTable).where(UsersTable.email == email)
-    session_user = session.exec(statement).first()
-    return session_user
-
-
 def get_user_by_username(session: Session, username: str) -> UsersTable | None:
     statement = select(UsersTable).where(UsersTable.username == username)
-    session_user = session.exec(statement).first()
-    return session_user
+    user = session.exec(statement).first()
+    return user
 
 
 def authenticate(
-    *, session: Session, email_or_username: str, password: str
+    *, session: Session, username: str, password: str
 ) -> UsersTable | None:
-    if "@" in email_or_username:
-        db_user = get_user_by_email(session=session, email=email_or_username)
-    else:
-        db_user = get_user_by_username(
-            session=session, username=email_or_username
+    db_user = get_user_by_username(
+            session=session, username=username
         )
     if not db_user:
         return None

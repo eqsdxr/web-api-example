@@ -9,12 +9,11 @@ from app.tests.utils import get_first_user_token_headers
 from app.db import get_db_session
 from app import models
 from app.config import main_config
-from app.crud import create_db_user
+from app.sec import get_password_hash
 
+test_db = "postgresql+psycopg://postgres:root@localhost/postgres"
 
-test_engine = create_engine(
-    "sqlite:///./test.db", echo=True, connect_args={"check_same_thread": False}
-)
+test_engine = create_engine(test_db)
 
 
 def create_db_and_tables(engine):
@@ -22,22 +21,22 @@ def create_db_and_tables(engine):
 
 
 def create_first_user(session):
-    test_user = models.UserCreate(
+    test_user = models.UsersTable(
         username=main_config.first_user_username,
-        email=main_config.first_user_email,
-        password=main_config.first_user_username,
+        password_hash=get_password_hash(main_config.first_user_password),
         is_active=True,
     )
-    create_db_user(session=session, user_create=test_user)
+    session.add(test_user)
+    session.commit()
 
 
 def override_get_db_session() -> Generator[Session, None, None]:
     create_db_and_tables(test_engine)
     with Session(test_engine) as session:
         create_first_user(session)
-    with Session(test_engine) as session:
         yield session
-        session.execute(delete(models.UsersTable))
+        statement = delete(models.UsersTable)
+        session.execute(statement)
         session.commit()
 
 

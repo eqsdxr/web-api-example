@@ -20,7 +20,7 @@ async def login(
 ) -> AccessToken:
     user = authenticate(
         session=session,
-        email_or_username=form_data.username,
+        username=form_data.username,
         password=form_data.password,
     )
     if not user:
