@@ -1,14 +1,15 @@
 # Usage
 
+- Clone the repository.
+- Create and activate a virtual environment.
+- Make sure you\'re in project root.
+
 To run tests:
-- Create and activate virtual environment
-- Run scripts/test.sh
 ```python
 bash scripts/test.sh
 ```
 
 To build and run docker app in docker container:
-- Run scripts/build.sh
 ```python
 bash scripts/build.sh
 ```
