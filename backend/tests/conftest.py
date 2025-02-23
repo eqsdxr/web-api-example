@@ -1,12 +1,9 @@
-from collections.abc import Generator
-
-from fastapi.testclient import TestClient
+from fastapi import FastAPI
 from pytest import fixture
 
-from ..main import app
+from ..main import app as main_app
 
 
 @fixture(scope="module")
-def client() -> Generator[TestClient, None, None]:
-    with TestClient(app) as client:
-        yield client
+def app() -> FastAPI:
+    return main_app
