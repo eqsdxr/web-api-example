@@ -11,7 +11,7 @@ async def test_upload(app: FastAPI):
         get_response = await ac.get("/upload")
     assert get_response.status_code != 200
 
-    test_image = "backend/tests/static/test.jpg"
+    test_image = "tests/static/test.jpg"
     with open(test_image, "rb") as file:
         async with AsyncClient(
             transport=ASGITransport(app=app), base_url="http://test"
@@ -22,4 +22,4 @@ async def test_upload(app: FastAPI):
     data = post_response.json()
     assert "filename" in data
     assert "metadata" in data
-    assert data["type"] == "image/jpeg"
+    assert data["content_type"] == "image/jpeg"

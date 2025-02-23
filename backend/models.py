@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 class MetadataResponse(BaseModel):
     filename: str
-    size: str
-    filetype: str
-    metadata: dict[str, str]
-    hash: str
+    size: int
+    content_type: str
+    metadata: dict[str | int, str | int]
+    hash: int
