@@ -78,7 +78,7 @@ def read_user_by_id(
     dependencies=[Depends(get_current_active_superuser)],
     response_model=UserResponse,
 )
-def patch_user(
+def update_user(
     *,
     session: SessionDep,
     user_id: UUID,
@@ -90,22 +90,22 @@ def patch_user(
             status_code=404,
             detail="The user with this id does not exist in the system",
         )
-    #  TODO  Remove this terrible code
     if user_in.username:
         existing_user = crud.get_user_by_username(
             session=session, username=user_in.username
         )
-        if existing_user and existing_user.id != user_id:
-            raise HTTPException(
-                status_code=409,
-                detail="This username is already assigned to this user",
-            )
         if existing_user:
+            if existing_user.id == user_id:
+                raise HTTPException(
+                    status_code=409,
+                    detail="This username is already assigned to this user",
+                )
+
             raise HTTPException(
                 status_code=409,
                 detail="User with this username already exists",
             )
-    updated_user = crud.update_user(
+    updated_user = crud.update_db_user(
         session=session, stored_user=db_user, user=user_in
     )
     return updated_user

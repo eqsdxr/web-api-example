@@ -11,7 +11,9 @@ from app import models
 
 
 @fixture(scope="session", autouse=True)
-def db() -> Generator[Session, None, None]:  # Use for direct db operations
+def test_session() -> (
+    Generator[Session, None, None]
+):  # Use for direct db operations
     with Session(engine) as session:
         init_db(engine, create_superuser=True)
         yield session

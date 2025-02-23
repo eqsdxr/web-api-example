@@ -42,11 +42,6 @@ async def login(
 #   pass
 #
 #
-# @router.put("/update-email", response_model=)
-# async def update_email() -> :
-#   pass
-#
-#
 # @router.put("/update-password", response_model=)
 # async def update_password() -> :
 #   pass

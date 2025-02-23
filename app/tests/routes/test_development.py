@@ -7,14 +7,14 @@ def test_check_api(client: TestClient):
 
 
 def test_check_database_connection(client: TestClient):
-    r = client.get(
+    response = client.get(
         "api/development/check-db",
     )
-    assert r.status_code == 200
+    assert response.status_code == 200
 
 
 def test_create_user_dev(client: TestClient) -> None:
-    r = client.post(
+    response = client.post(
         "api/development/create-user-dev/",
         json={
             "username": "DSF(*J#jfdsfkjh",
@@ -22,4 +22,4 @@ def test_create_user_dev(client: TestClient) -> None:
         },
     )
 
-    assert r.status_code == 200
+    assert response.status_code == 200

@@ -13,7 +13,7 @@ def get_user_by_username(session: Session, username: str) -> UsersTable | None:
     return user
 
 
-def create_db_user(*, session: Session, user_create: UserCreate) -> UsersTable:
+def create_db_user(session: Session, user_create: UserCreate) -> UsersTable:
     user = get_user_by_username(session, user_create.username)
     if user:
         raise HTTPException(400, "User with this email is already registered")
@@ -27,10 +27,10 @@ def create_db_user(*, session: Session, user_create: UserCreate) -> UsersTable:
     return db_obj
 
 
-def update_user(
+def update_db_user(
     *, session: Session, stored_user: UsersTable, user: UserUpdate
 ) -> Any:
-    user_data = user.model_dump(exclude_unset=True, exclude_none=True)
+    user_data = user.model_dump(exclude_unset=True)
     extra_data = {}
     if "password" in user_data:
         extra_data["password_hash"] = get_password_hash(user_data["password"])
