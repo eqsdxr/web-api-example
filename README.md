@@ -14,3 +14,8 @@ To build and run docker app in docker container:
 bash scripts/build.sh
 ```
 P.S. You may need to use `sudo bash scripts/build.sh`.
+
+To run locally:
+```python
+bash scripts/run.sh
+```
