@@ -5,6 +5,7 @@ from pytest import fixture
 
 from ..main import app
 
+
 @fixture(scope="module")
 def client() -> Generator[TestClient, None, None]:
     with TestClient(app) as client:
