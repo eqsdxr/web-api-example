@@ -1,6 +1,6 @@
 services:
-  api_service:
-    build: api_service/
+  app:
+    build: app/
     ports:
       - "8000:8000"
     develop:

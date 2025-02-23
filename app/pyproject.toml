@@ -1,11 +1,10 @@
 [project]
-name = "api_service"
+name = "app"
 version = "0.1.0"
 requires-python = ">=3.11"
 dependencies = [
     "fastapi[standard]>=0.115.8",
     "httpx>=0.28.1",
-    "maturin>=1.8.2",
     "pillow>=11.1.0",
     "pydantic>=2.10.6",
     "python-multipart>=0.0.20",
