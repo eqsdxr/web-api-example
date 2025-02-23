@@ -1,14 +1,14 @@
 FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
-WORKDIR /backend
+WORKDIR /api_service
 
-ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PATH="/app/.venv/bin:$PATH"
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PATH="/api_service/.venv/bin:$PATH"
 
-COPY uv.lock pyproject.toml /backend/
+COPY uv.lock pyproject.toml /api_service/
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-install-project --no-dev
 
-COPY . /app
+COPY . /api_service
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev
 
