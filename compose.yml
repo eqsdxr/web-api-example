@@ -1,29 +1,8 @@
-volumes:
-  postgres_data:
 services:
-  db:
-    image: postgres:17
-    ports:
-      - "5432:5432"
-    env_file:
-      - .env
-    environment:
-      - POSTGRES_USER=${postgres_user}
-      - POSTGRES_PASSWORD=${postgres_password}
-      - POSTGRES_DB=${postgres_db}
-      - POSTGRES_HOST_AUTH_METHOD=trust
-    networks:
-      - my_network
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
   backend:
     build: .
     ports:
       - "8000:8000"
-    depends_on:
-      - db
-    networks:
-      - my_network
     develop:
       watch:
         - action: sync
@@ -33,7 +12,4 @@ services:
             - .venv/
         - action: rebuild
           path: uv.lock
-networks:
-  my_network:
-    driver: bridge
 

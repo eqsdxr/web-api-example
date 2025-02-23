@@ -4,11 +4,6 @@ from fastapi.testclient import TestClient
 from pytest import fixture
 from sqlmodel import Session, delete
 
-from app.main import app
-from app.tests.utils import get_first_user_token_headers
-from app.db import engine, init_db
-from app import models
-
 
 @fixture(scope="session", autouse=True)
 def test_session() -> (
