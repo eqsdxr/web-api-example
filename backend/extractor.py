@@ -12,5 +12,3 @@ def extract_image_metadata(img: BinaryIO) -> dict[str, str]:
         value = exifdata.get(tagid)
         metadata[tagname] = value
     return metadata
-
-
