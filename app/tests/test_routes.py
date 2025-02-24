@@ -2,7 +2,7 @@ import pytest
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 
-from ..config import test_static_dir
+from ..config import get_settings
 
 
 @pytest.mark.anyio
@@ -13,7 +13,7 @@ async def test_upload(app: FastAPI):
         get_response = await ac.get("/upload")
     assert get_response.status_code != 200
 
-    test_image = test_static_dir / "test.jpg"
+    test_image = get_settings().test_static_dir / "test.jpg"
     with open(test_image, "rb") as file:
         async with AsyncClient(
             transport=ASGITransport(app=app), base_url="http://test"
