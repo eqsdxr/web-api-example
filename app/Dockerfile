@@ -13,5 +13,6 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev
 
 ENTRYPOINT []
-CMD ["fastapi", "dev", "--host", "0.0.0.0"]
+# CMD ["fastapi", "run", "--workers", "4", "app/main.py"]  # Deployment
+CMD ["fastapi", "dev", "--host", "0.0.0.0"]  # Developing
 
