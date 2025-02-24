@@ -2,10 +2,12 @@ from fastapi import APIRouter, UploadFile
 
 from .models import MetadataResponse
 from .extractor import extract_metadata
+from .config import logger
 
 router = APIRouter()
 
 
+@logger.catch  # Catch unexpected exceptions
 @router.post("/upload", response_model=MetadataResponse)
 async def upload_file(file: UploadFile) -> MetadataResponse:
     metadata = {}
