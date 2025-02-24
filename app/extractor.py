@@ -27,7 +27,8 @@ async def extract_image_metadata(img: BinaryIO) -> dict[str, str]:
 
 async def extract_metadata(file: UploadFile) -> dict[str, str]:
     match file.content_type:
-        case "image/jpeg":
+        case "image/jpeg" | "image/png":
             return await extract_image_metadata(file.file)
-    logger.info("Unsupported file type: ", file.content_type)
-    raise HTTPException(415, "Unsupported file type")
+        case _:
+            logger.info("Unsupported file type: ", file.content_type)
+            raise HTTPException(415, "Unsupported file type")
