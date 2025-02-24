@@ -7,7 +7,7 @@
 uv venv
 uv sync
 ```
-- Make sure you\'re in project root.
+- Make sure you\'re in the project's root.
 
 To run tests:
 ```python
