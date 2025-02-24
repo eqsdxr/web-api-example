@@ -1,4 +1,4 @@
-# Usage
+### Usage
 
 - Clone the repository.
 - Create and activate a virtual environment.
@@ -13,7 +13,7 @@ To build and run docker app in docker container:
 ```python
 bash scripts/build.sh
 ```
-P.S. You may need to use `sudo bash scripts/build.sh`.
+You may need to use `sudo bash scripts/build.sh`.
 
 To run locally:
 ```python
