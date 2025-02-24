@@ -6,4 +6,4 @@ class MetadataResponse(BaseModel):
     size: int
     content_type: str
     metadata: dict[str | int, str | int]
-    hash: int
+    hash: str
