@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     test_static_dir: Path = Path().parent.parent / "app" / "tests" / "static"
     app_info: dict = {
         "title": "File metadata extractor API",
-        "description": "__No description.__",
+        "description": "No description.",  # Markdown is possible to be used here
         "summary": "No summary.",
         "version": "0.0.1",
         "terms_of_service": "https://broken_link.unknown",
@@ -44,6 +44,8 @@ class Settings(BaseSettings):
     allowed_headers: list[str] = []
 
 
+# It makes sense to use a function for settings because it can be used
+# as a dependency in endpoints which then can be overriden for tests
 @lru_cache  # Optimize performance by caching
 def get_settings():
     return Settings()

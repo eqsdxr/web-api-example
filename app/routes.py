@@ -31,5 +31,5 @@ async def upload_file(file: UploadFile, request: Request) -> MetadataResponse:
         host = "Unknown"
     else:
         host = request.client.host
-    logger.info(f"{host}; {file_size}; {file.filename}; {file.content_type}")
+    logger.info(f"{host}; {file_size}; {file.content_type}")
     return MetadataResponse(**metadata)
