@@ -1,7 +1,7 @@
 from typing import BinaryIO
 from PIL import Image
 from PIL.ExifTags import TAGS
-from fastapi import HTTPException, UploadFile
+from fastapi import HTTPException, UploadFile, status
 from asyncio import to_thread
 
 from .config import logger
@@ -19,7 +19,9 @@ async def extract_image_metadata(img: BinaryIO) -> dict[str, str]:
                     metadata[tag_name] = exifdata.get(tag_id)
         except Exception as e:
             logger.info(e)
-            raise HTTPException(400, "Failed to process image")
+            raise HTTPException(
+                status.HTTP_400_BAD_REQUEST, "Failed to process image"
+            )
         return metadata
 
     return await to_thread(_extract)
@@ -31,4 +33,7 @@ async def extract_metadata(file: UploadFile) -> dict[str, str]:
             return await extract_image_metadata(file.file)
         case _:
             logger.info("Unsupported file type: ", file.content_type)
-            raise HTTPException(415, "Unsupported file type")
+            raise HTTPException(
+                status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                "Unsupported media type",
+            )

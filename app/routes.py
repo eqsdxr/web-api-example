@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 @logger.catch  # Catch unexpected exceptions
-@router.post("/upload", response_model=MetadataResponse)
+@router.post("/upload", response_model=MetadataResponse, tags=["metadata"])
 async def upload_file(file: UploadFile) -> MetadataResponse:
     file_size = file.file.seek(0, SEEK_END)
     await file.seek(0)  # Reset pointer position
