@@ -5,5 +5,5 @@ from ..main import app as main_app
 
 
 @fixture(scope="module")
-def app() -> FastAPI:
+async def app() -> FastAPI:
     return main_app
