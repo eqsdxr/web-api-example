@@ -1,11 +1,8 @@
-from os import SEEK_END
-
 from fastapi import APIRouter, Request, UploadFile, status
 
-from .models import MetadataResponse
-from .extractor import extract_metadata
+from .models import MetadataResponseList
 from .config import logger
-from .utils import calculate_sha256
+from .utils import process_file
 
 router = APIRouter()
 
@@ -13,23 +10,20 @@ router = APIRouter()
 @logger.catch  # Catch unexpected exceptions
 @router.post(
     "/upload",
-    response_model=MetadataResponse,
+    response_model=MetadataResponseList,
     status_code=status.HTTP_200_OK,
     tags=["metadata"],
 )
-async def upload_file(file: UploadFile, request: Request) -> MetadataResponse:
-    file_size = file.file.seek(0, SEEK_END)
-    await file.seek(0)  # Reset pointer position
-    metadata = {
-        "filename": file.filename,
-        "size": file_size,
-        "content_type": file.content_type,
-        "metadata": await extract_metadata(file),
-        "hash": await calculate_sha256(file),
-    }
-    if not request.client:
-        host = "Unknown"
-    else:
-        host = request.client.host
-    logger.info(f"{host}; {file_size}; {file.content_type}")
-    return MetadataResponse(**metadata)
+async def upload_files(
+    files: list[UploadFile], request: Request
+) -> MetadataResponseList:
+    response = MetadataResponseList(count=len(files), metadata_set=[])
+    for file in files:
+        metadata = await process_file(file)
+        if not request.client:
+            host = "Unknown"
+        else:
+            host = request.client.host
+        logger.info(f"{host}; {file.size}; {file.content_type}")
+        response.metadata_set.append(metadata)
+    return response
