@@ -2,27 +2,45 @@ The project was made for learning purposes.
 
 ### Usage
 
-- Make sure you have `uv` and `docker` (optional) are installed on your machine.
-- Clone the repository.
-- Create and activate a virtual environment.
+- Make sure you have `uv` and `docker` (optional) installed on your machine.
+
+Clone the repository.
+
+Create and activate a virtual environment.
 ```
 uv venv
+source .venv/bin/activate
+```
+
+Install the project's dependencies.
+```
 uv sync
 ```
+
 - Make sure you\'re in the project's root.
 
 To run tests:
-```python
+```bash
 bash scripts/test.sh
 ```
 
 To build and run docker app in docker container:
-```python
-bash scripts/build.sh
+```bash
+bash scripts/docker.sh
 ```
-You may need to use `sudo bash scripts/build.sh`.
+You may need to use `sudo bash scripts/docker.sh`.
 
 To run locally:
-```python
-bash scripts/run.sh
+```bash
+bash scripts/local.sh
+```
+
+To install pre-commit hooks use:
+```bash
+pre-commit install
+```
+
+To format and lint code use:
+```bash
+bash scripts/code.sh
 ```
