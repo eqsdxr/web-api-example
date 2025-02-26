@@ -1,4 +1,4 @@
-The project is for learning purposes.
+The project was made for learning purposes.
 
 ### Usage
 
