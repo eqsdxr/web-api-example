@@ -35,7 +35,7 @@ To run locally:
 bash scripts/local.sh
 ```
 
-To install pre-commit hooks use:
+To install pre-commit hooks:
 ```bash
 pre-commit install
 ```
