@@ -15,13 +15,14 @@ from .models import MetadataResponse
 async def extract_image_metadata(img: BinaryIO) -> dict[str, str]:
     # Execute in a thread pool for performance reasons
     def _extract():
+        img.seek(0)  # Ensure the file pointer is in the start
         metadata = {}
         try:
             with Image.open(img) as image:
                 exifdata = image.getexif()
                 for tag_id in exifdata:
                     tag_name = TAGS.get(tag_id, tag_id)
-                    metadata[tag_name] = str(exifdata.get(tag_id))
+                    metadata[tag_name] = exifdata.get(tag_id)
         except Exception as e:
             logger.info(e)
             raise HTTPException(
@@ -58,7 +59,7 @@ async def process_file(file: UploadFile) -> MetadataResponse:
     await file.seek(0)  # Reset pointer position
     metadata = {
         "filename": file.filename,
-        "size": str(file_size),
+        "size": file_size,
         "content_type": file.content_type,
         "metadata": await extract_file_metadata(file),
         "hash": await calculate_sha256(file),
