@@ -1,3 +1,5 @@
+The project is made only for learning purposes so it's read-only.
+
 ### Usage
 
 - Make sure you have `uv` and `docker` (optional) are installed on your machine.
