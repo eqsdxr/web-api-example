@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Request, UploadFile, status
 
-from .models import MetadataResponseList
-from .config import logger
-from .utils import process_file
+from app.config import logger
+from app.models import MetadataResponseList
+from app.utils import process_file
 
 router = APIRouter()
 

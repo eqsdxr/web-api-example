@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routes import router
-from .config import get_settings
+from app.config import get_settings
+from app.routes import router
 
 # Turn off redoc docs, they are useless
 app = FastAPI(

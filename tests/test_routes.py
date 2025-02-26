@@ -2,7 +2,7 @@ import pytest
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 
-from ..config import get_settings
+from app.config import get_settings
 
 
 @pytest.mark.anyio

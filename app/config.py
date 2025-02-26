@@ -1,6 +1,6 @@
-from sys import stdout
-from pathlib import Path
 from functools import lru_cache
+from pathlib import Path
+from sys import stdout
 
 from loguru import logger
 from pydantic_settings import BaseSettings
@@ -10,7 +10,7 @@ logger.add(stdout, colorize=True, level="INFO")
 
 class Settings(BaseSettings):
     # A directory for storing files used in tests
-    test_static_dir: Path = Path().parent.parent / "app" / "tests" / "static"
+    test_static_dir: Path = Path().parent.parent / "tests" / "static"
     app_info: dict = {
         "title": "File metadata extractor API",
         "description": "No description.",  # Markdown is possible to be used here

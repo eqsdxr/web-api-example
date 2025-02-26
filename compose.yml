@@ -1,6 +1,6 @@
 services:
   app:
-    build: app/
+    build: .
     ports:
       - "8000:8000"
     develop:

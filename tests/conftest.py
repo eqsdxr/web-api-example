@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from pytest import fixture
 
-from ..main import app as main_app
+from app.main import app as main_app
 
 
 @fixture(scope="module")

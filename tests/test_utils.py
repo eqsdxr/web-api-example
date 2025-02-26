@@ -1,8 +1,8 @@
 import pytest
 from fastapi import UploadFile
 
-from ..utils import calculate_sha256
-from ..config import get_settings
+from app.config import get_settings
+from app.utils import calculate_sha256
 
 
 @pytest.mark.anyio

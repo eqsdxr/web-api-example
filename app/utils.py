@@ -1,15 +1,14 @@
-from typing import BinaryIO
+from asyncio import to_thread
 from hashlib import sha256
 from os import SEEK_END
+from typing import BinaryIO
 
-from fastapi import UploadFile
+from fastapi import HTTPException, UploadFile, status
 from PIL import Image
 from PIL.ExifTags import TAGS
-from fastapi import HTTPException, status
-from asyncio import to_thread
 
-from .config import logger
-from .models import MetadataResponse
+from app.config import logger
+from app.models import MetadataResponse
 
 
 async def extract_image_metadata(img: BinaryIO) -> dict[str, str]:
