@@ -17,7 +17,7 @@ Install the project's dependencies.
 uv sync
 ```
 
-- Make sure you\'re in the project's root.
+- Make sure you\'re in the project's root before using the following scripts.
 
 To run tests:
 ```bash
