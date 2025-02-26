@@ -1,4 +1,4 @@
-The project is made for learning purposes so it's read-only.
+The project is for learning purposes.
 
 ### Usage
 
