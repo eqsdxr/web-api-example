@@ -1,6 +1,6 @@
 ### Usage
 
-- Make sure you have `uv` installed on your machine.
+- Make sure you have `uv` and `docker` (optional) are installed on your machine.
 - Clone the repository.
 - Create and activate a virtual environment.
 ```
