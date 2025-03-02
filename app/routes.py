@@ -1,7 +1,14 @@
-from fastapi import APIRouter, Request, UploadFile, status
+from datetime import timedelta
+from typing import Annotated
 
-from app.config import logger
-from app.models import MetadataResponseList
+from fastapi import APIRouter, Depends, Request, UploadFile, status
+from fastapi.security import OAuth2PasswordRequestFormStrict
+
+from app.config import get_settings, logger
+from app.crud import authenticate
+from app.deps import SessionDep
+from app.models import MetadataResponseList, Token
+from app.sec import create_access_token
 from app.utils import process_file
 
 router = APIRouter()
@@ -27,3 +34,29 @@ async def upload_files(
         logger.info(f"{host}; {file.size}; {file.content_type}")
         response.metadata_set.append(metadata)
     return response
+
+
+@logger.catch
+@router.post(
+    "/login/access-token",
+    response_model=Token,
+    status_code=status.HTTP_200_OK,
+    tags=["login"],
+)
+async def login(
+    session: SessionDep,
+    form_data: Annotated[OAuth2PasswordRequestFormStrict, Depends()],
+) -> Token:
+    user = authenticate(
+        session=session,
+        username=form_data.username,
+        password=form_data.password,
+    )
+    access_token_expires = timedelta(
+        minutes=get_settings().jwt_access_token_expire_minutes
+    )
+    return Token(
+        access_token=create_access_token(
+            user.id, expires_delta=access_token_expires
+        )
+    )

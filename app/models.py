@@ -1,4 +1,7 @@
+from uuid import UUID, uuid4
+
 from pydantic import BaseModel
+from sqlmodel import Field, SQLModel
 
 
 class MetadataResponse(BaseModel):
@@ -12,3 +15,40 @@ class MetadataResponse(BaseModel):
 class MetadataResponseList(BaseModel):
     count: int
     metadata_set: list[MetadataResponse]
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+class TokenPayload(BaseModel):
+    sub: str | None = None
+
+
+class UserBase(SQLModel):
+    password: str = Field(min_length=8, max_length=50)
+
+
+class UserResponse(SQLModel):
+    id: UUID
+    username: str
+
+
+class UserIn(UserBase):
+    username: str
+
+
+class UserCreate(UserBase):
+    username: str
+
+
+class UserUpdate(SQLModel):
+    username: str | None = Field(default=None, min_length=5, max_length=50)
+    password: str | None = Field(default=None, min_length=8, max_length=50)
+
+
+class User(SQLModel, table=True):
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    username: str = Field(index=True)
+    hashed_password: str
