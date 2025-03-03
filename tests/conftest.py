@@ -2,9 +2,9 @@ from typing import Annotated, Generator
 
 from fastapi import Depends, FastAPI
 from pytest import fixture
-from sqlmodel import Session, create_engine
+from sqlmodel import Session
 
-from app.db import create_first_user, create_tables
+from app.db import create_first_user, create_tables, engine
 from app.deps import get_db
 from app.main import app as main_app
 
@@ -15,11 +15,11 @@ async def app() -> FastAPI:
 
 
 def get_test_db() -> Generator[Session, None, None]:
-    test_engine = create_engine("sqlite:///sqlite.db")
-    create_tables(test_engine)
-    with Session(test_engine) as session:
+    create_tables(engine)
+    with Session(engine) as session:
         create_first_user(session)
         yield session
+        session.commit()
 
 
 TestDBSessionDep = Annotated[Session, Depends(get_test_db)]

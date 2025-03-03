@@ -14,15 +14,15 @@ def create_tables(engine):
 def create_first_user(session: Session):
     user = session.exec(
         select(User).where(
-            User.username == get_settings().first_superuser_username
+            User.username == get_settings().FIRST_SUPERUSER_USERNAME
         )
     ).first()
     if not user:
         user_create = UserCreate(
-            username=get_settings().first_superuser_username,
-            password=get_settings().first_superuser_password,
+            username=get_settings().FIRST_SUPERUSER_USERNAME,
+            password=get_settings().FIRST_SUPERUSER_PASSWORD,
         )
         user = create_user(session=session, user_create=user_create)
 
 
-engine = create_engine(get_settings().database_uri)
+engine = create_engine(get_settings().DATABASE_URI)

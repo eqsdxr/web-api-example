@@ -4,18 +4,23 @@ from secrets import token_urlsafe
 from sys import stdout
 
 from loguru import logger
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 logger.add(stdout, colorize=True, level="INFO")
 
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_ignore_empty=True,
+        extra="ignore",
+    )
     # A directory for storing files used in tests
-    test_static_dir: Path = Path().parent.parent / "tests" / "static"
+    TEST_STATIC_DIR: Path = Path().parent.parent / "tests" / "static"
     # Data that will be shown in Swagger UI
-    app_info: dict = {
+    APP_INFO: dict = {
         "title": "File metadata extractor API",
-        "description": "No description.",  # Markdown is possible to be used here
+        "description": "No description.",  # Markdown
         "summary": "No summary.",
         "version": "0.0.1",
         "terms_of_service": "https://broken_link.unknown",
@@ -29,7 +34,7 @@ class Settings(BaseSettings):
             "url": "https://unlicense.org/",
         },
     }
-    tags_metadata: list[dict] = [
+    TAG_METADATA: list[dict] = [
         {
             "name": "metadata",
             "description": "Metadata extracting operations.",
@@ -40,18 +45,17 @@ class Settings(BaseSettings):
         }
     ]
     # Cross-Origin Resource Sharing (CORS)
-    allowed_origins: list[str] = []
-    allowed_credentials: bool = False
-    allowed_methods: list[str] = []
-    allowed_headers: list[str] = []
+    ALLOWED_ORIGINS: list[str] = []
+    ALLOWED_CREDENTIALS: bool = False
+    ALLOWED_METHODS: list[str] = []
+    ALLOWED_HEADERS: list[str] = []
     # JWT
-    jwt_secret: str = token_urlsafe(32)
-    jwt_algorithm: str = "HS256"
-    jwt_access_token_expire_minutes: int = 60
-
-    database_uri: str = "sqlite:///:memory:"
-    first_superuser_username: str = "superuser"
-    first_superuser_password: str = "secret897"
+    JWT_SECRET: str = token_urlsafe(32)
+    JWT_ALGORITHM: str = "HS256"
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+    DATABASE_URI: str = "sqlite:///sqlite.db"
+    FIRST_SUPERUSER_USERNAME: str = "superuser"
+    FIRST_SUPERUSER_PASSWORD: str = "secret897"
 
 
 # It makes sense to use a function for settings because it can be used

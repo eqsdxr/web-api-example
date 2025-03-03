@@ -13,7 +13,7 @@ async def test_upload_single_img(app: FastAPI):
         get_response = await ac.get("/upload")
     assert get_response.status_code != 200
 
-    test_image = get_settings().test_static_dir / "test_img1.jpg"
+    test_image = get_settings().TEST_STATIC_DIR / "test_img1.jpg"
     with open(test_image, "rb") as file:
         async with AsyncClient(
             transport=ASGITransport(app=app), base_url="http://test"
@@ -32,7 +32,7 @@ async def test_upload_single_img(app: FastAPI):
 
 @pytest.mark.anyio
 async def test_upload_multiple_imgs(app: FastAPI):
-    test_dir = get_settings().test_static_dir
+    test_dir = get_settings().TEST_STATIC_DIR
     imgs = ["test_img1.jpg", "test_img2.jpg"]
 
     files = []
@@ -56,8 +56,8 @@ async def test_upload_multiple_imgs(app: FastAPI):
 async def test_login_access_token(app: FastAPI):
     data = {
         "grant_type": "password",
-        "username": get_settings().first_superuser_username,
-        "password": get_settings().first_superuser_password,
+        "username": get_settings().FIRST_SUPERUSER_USERNAME,
+        "password": get_settings().FIRST_SUPERUSER_PASSWORD,
     }
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"
@@ -66,3 +66,4 @@ async def test_login_access_token(app: FastAPI):
 
     assert response.status_code == 200
     data = response.json()
+    assert "access_token" in data

@@ -19,8 +19,8 @@ def create_access_token(subject: str | Any, expires_delta: timedelta) -> str:
     to_encode = {"subject": str(subject), "expire": expire.isoformat()}
     encoded_jwt = jwt.encode(
         to_encode,
-        get_settings().jwt_secret,
-        algorithm=get_settings().jwt_algorithm,
+        get_settings().JWT_SECRET,
+        algorithm=get_settings().JWT_ALGORITHM,
     )
     return encoded_jwt
 

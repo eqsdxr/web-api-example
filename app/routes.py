@@ -53,7 +53,7 @@ async def login(
         password=form_data.password,
     )
     access_token_expires = timedelta(
-        minutes=get_settings().jwt_access_token_expire_minutes
+        minutes=get_settings().JWT_ACCESS_TOKEN_EXPIRE_MINUTES
     )
     return Token(
         access_token=create_access_token(

@@ -3,6 +3,10 @@ services:
     build: .
     ports:
       - "8000:8000"
+    depends_on:
+      - database
+    networks:
+      - postgres-network
     develop:
       watch:
         - action: sync
@@ -12,4 +16,26 @@ services:
             - .venv/
         - action: rebuild
           path: uv.lock
+  database:
+    image: 'postgres:17'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    ports:
+      - 15432:5432
+    env_file:
+      - .env
+    networks:
+      - postgres-network
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
+      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
+      - POSTGRES_DB=${POSTGRES_DB?Variable not set}
 
+networks: 
+  postgres-network:
+    driver: bridge
