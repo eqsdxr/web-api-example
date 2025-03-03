@@ -19,4 +19,5 @@ app.add_middleware(
     allow_headers=get_settings().ALLOWED_HEADERS,
 )
 
+app.include_router(prefix="/latest", router=router)
 app.include_router(prefix="/v1", router=router)
