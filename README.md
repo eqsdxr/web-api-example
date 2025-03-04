@@ -1,5 +1,7 @@
 The project was made for learning purposes.
 
+___
+
 Project highlights:
 - Alembic
 - Docker
