@@ -5,9 +5,11 @@ from sys import stdout
 
 from loguru import logger
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 logger.add(stdout, colorize=True, level="INFO")
-
+limiter = Limiter(key_func=get_remote_address)
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
