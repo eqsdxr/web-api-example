@@ -14,7 +14,9 @@ app = FastAPI(
 )
 
 app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, handler=_rate_limit_exceeded_handler) # type: ignore
+app.add_exception_handler(
+    RateLimitExceeded, handler=_rate_limit_exceeded_handler
+)  # type: ignore
 
 app.add_middleware(
     CORSMiddleware,

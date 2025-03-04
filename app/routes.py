@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, Request, UploadFile, status
 from fastapi.security import OAuth2PasswordRequestFormStrict
 
-from app.config import get_settings, logger, limiter
+from app.config import get_settings, limiter, logger
 from app.crud import authenticate
 from app.deps import SessionDep
 from app.models import MetadataResponseList, Token
@@ -24,7 +24,8 @@ router = APIRouter()
 @limiter.limit("5/minute")
 async def upload_files(
     # `request` is required by slowapi https://slowapi.readthedocs.io/en/latest/
-    files: list[UploadFile], request: Request
+    files: list[UploadFile],
+    request: Request,
 ) -> MetadataResponseList:
     response = MetadataResponseList(count=len(files), metadata_set=[])
     for file in files:
