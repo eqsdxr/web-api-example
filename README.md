@@ -1,5 +1,15 @@
 The project was made for learning purposes.
 
+Project highlights:
+- Alembic
+- Docker
+- PostgreSQL
+- Rate limiter
+- Clean code
+- Versioning
+- Asynchronous operations
+- Tests
+
 ### Usage
 
 - Make sure you have `uv` and `docker` (optional) installed on your machine.
