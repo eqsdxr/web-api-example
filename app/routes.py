@@ -6,12 +6,12 @@ from fastapi.security import OAuth2PasswordRequestFormStrict
 
 from app.config import get_settings, limiter, logger
 from app.crud import authenticate
-from app.deps import SessionDep
+from app.deps import SessionDep, get_current_user
 from app.models import MetadataResponseList, Token
 from app.sec import create_access_token
 from app.utils import process_file
 
-router = APIRouter()
+router = APIRouter(prefix="/v1")
 
 
 @logger.catch  # Catch unexpected exceptions
@@ -20,11 +20,12 @@ router = APIRouter()
     response_model=MetadataResponseList,
     status_code=status.HTTP_200_OK,
     tags=["metadata"],
+    dependencies=[Depends(get_current_user)],
 )
 @limiter.limit("5/minute")
 async def upload_files(
-    # `request` is required by slowapi https://slowapi.readthedocs.io/en/latest/
     files: list[UploadFile],
+    # `request` is required by slowapi https://slowapi.readthedocs.io/en/latest/
     request: Request,
 ) -> MetadataResponseList:
     response = MetadataResponseList(count=len(files), metadata_set=[])
@@ -52,6 +53,7 @@ async def login(
     session: SessionDep,
     form_data: Annotated[OAuth2PasswordRequestFormStrict, Depends()],
 ) -> Token:
+    _ = request  # Stop showing the warning
     user = authenticate(
         session=session,
         username=form_data.username,
