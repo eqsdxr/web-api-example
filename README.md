@@ -52,7 +52,7 @@ To install pre-commit hooks:
 pre-commit install
 ```
 
-To format and lint code use:
+To format and lint code:
 ```bash
 bash scripts/code.sh
 ```
