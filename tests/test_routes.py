@@ -10,7 +10,7 @@ async def test_upload_single_img(app: FastAPI):
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"
     ) as ac:
-        get_response = await ac.get("v1/upload")
+        get_response = await ac.get("api/v1/upload")
     assert get_response.status_code != 200
 
     test_image = get_settings().TEST_STATIC_DIR / "test_img1.jpg"
@@ -18,7 +18,9 @@ async def test_upload_single_img(app: FastAPI):
         async with AsyncClient(
             transport=ASGITransport(app=app), base_url="http://test"
         ) as ac:
-            post_response = await ac.post("v1/upload", files={"files": file})
+            post_response = await ac.post(
+                "api/v1/upload", files={"files": file}
+            )
 
     assert post_response.status_code == 200
     data = post_response.json()
@@ -43,7 +45,7 @@ async def test_upload_multiple_imgs(app: FastAPI):
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"
     ) as ac:
-        response = await ac.post("v1/upload", files=files)
+        response = await ac.post("api/v1/upload", files=files)
 
     assert response.status_code == 200
     data = response.json()
@@ -62,7 +64,7 @@ async def test_login_access_token(app: FastAPI):
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"
     ) as ac:
-        response = await ac.post("v1/login/access-token", data=data)
+        response = await ac.post("api/v1/login/access-token", data=data)
 
     assert response.status_code == 200
     data = response.json()
