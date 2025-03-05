@@ -23,7 +23,7 @@ class Token(BaseModel):
 
 
 class TokenPayload(BaseModel):
-    sub: str | None = None
+    subject: str | None = None
 
 
 class UserBase(SQLModel):
