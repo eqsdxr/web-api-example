@@ -1,14 +1,12 @@
 """empty message
 
 Revision ID: c6ab3a3a84e2
-Revises: 
+Revises:
 Create Date: 2025-03-02 19:44:31.940922
 
 """
-from typing import Sequence, Union
 
-import sqlalchemy as sa
-from alembic import op
+from typing import Sequence, Union
 
 # revision identifiers, used by Alembic.
 revision: str = "c6ab3a3a84e2"
