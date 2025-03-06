@@ -8,8 +8,10 @@ from argon2.exceptions import (
     VerificationError,
     VerifyMismatchError,
 )
+from sqlmodel import Session
 
 from app.config import get_settings
+from app.models import User
 
 ph = PasswordHasher()
 
@@ -34,3 +36,14 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
         return ph.verify(hashed_password, plain_password)
     except (VerificationError, VerifyMismatchError, InvalidHashError):
         return False
+
+
+def check_and_rehash(
+    session: Session, user: User, plain_text_password: str
+) -> None:
+    if ph.check_needs_rehash(user.hashed_password):
+        rehashed_password = ph.hash(plain_text_password)
+        user.hashed_password = rehashed_password
+        session.add(User)
+        session.commit()
+        session.refresh(User)
