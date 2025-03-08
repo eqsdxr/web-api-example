@@ -56,13 +56,14 @@ class Settings(BaseSettings):
     JWT_SECRET: str = token_urlsafe(32)
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+
     DATABASE_URI: str = "sqlite:///sqlite.db"
     FIRST_SUPERUSER_USERNAME: str = "superuser"
     FIRST_SUPERUSER_PASSWORD: str = "secret897"
 
 
-# It makes sense to use a function for settings because it can be used
-# as a dependency in endpoints which then can be overriden for tests
+# Using a function for settings allows it to be used as a dependency
+# in endpoints, making it possible to override it in tests
 @lru_cache  # Optimize performance by caching
 def get_settings():
     return Settings()

@@ -31,7 +31,7 @@ async def login(
         username=form_data.username,
         password=form_data.password,
     )
-    # Rehashing logic when log in that is recommended by argon2
+    # Recommended Argon2 rehashing logic during login
     # https://pypi.org/project/argon2-cffi/
     check_and_rehash(session, user, form_data.password)
     access_token_expires = timedelta(

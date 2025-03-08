@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, Request, UploadFile, status
 from app.config import limiter, logger
 from app.deps import get_current_user
 from app.models import MetadataResponseList
-from app.utils import process_file
+from app.utils import get_file_info
 
 metadata_router = APIRouter(prefix="/metadata", tags=["metadata"])
 
@@ -24,7 +24,7 @@ async def upload_files(
     # _ = request  # Stop showing the warning
     response = MetadataResponseList(count=len(files), metadata_set=[])
     for file in files:
-        metadata = await process_file(file)
+        metadata = await get_file_info(file)
         if not request.client:
             host = "Unknown"
         else:
