@@ -17,7 +17,7 @@ def get_db() -> Generator[Session, None, None]:
 
 
 reusable_oauth2 = OAuth2PasswordBearer(
-    tokenUrl="api/latest/login/access-token"
+        tokenUrl="api/v1/login/access-token"
 )
 
 SessionDep = Annotated[Session, Depends(get_db)]
