@@ -45,7 +45,24 @@ class Settings(BaseSettings):
                 "description": "No description",
                 "url": "https://broken_link.unknown",
             },
+        },
+        {
+            "name": "login",
+            "description": "Login endpoints.",
+            "external_docs": {
+                "description": "No description",
+                "url": "https://broken_link.unknown",
+            },
+        },
+        {
+            "name": "users",
+            "description": "Users operations.",
+            "external_docs": {
+                "description": "No description",
+                "url": "https://broken_link.unknown",
+            },
         }
+
     ]
     # Cross-Origin Resource Sharing (CORS)
     ALLOWED_ORIGINS: list[str] = []

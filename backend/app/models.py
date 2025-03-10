@@ -35,6 +35,7 @@ class UserResponse(SQLModel):
     username: str
 
 
+
 class UserIn(UserBase):
     username: str
 
@@ -46,6 +47,11 @@ class UserCreate(UserBase):
 class UserUpdate(SQLModel):
     username: str | None = Field(default=None, min_length=5, max_length=50)
     password: str | None = Field(default=None, min_length=8, max_length=50)
+
+
+class UsersPublic(BaseModel):
+    count: int
+    users: list[UserResponse]
 
 
 class User(SQLModel, table=True):
