@@ -32,4 +32,5 @@ line-length=79
 
 [tool.ruff.lint]
 fixable = ["ALL"]
-unfixable = ["F401", "E402"]
+unfixable = ["F401"]
+ignore = ["E402"]
