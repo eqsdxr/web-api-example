@@ -1,14 +1,13 @@
 from datetime import timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Request, status
-from fastapi.security import OAuth2PasswordRequestFormStrict
-
 from app.config import get_settings, limiter, logger
 from app.crud import authenticate
 from app.deps import SessionDep
 from app.models import Token
 from app.sec import check_and_rehash, create_access_token
+from fastapi import APIRouter, Depends, Request, status
+from fastapi.security import OAuth2PasswordRequestFormStrict
 
 login_router = APIRouter(prefix="/login", tags=["login"])
 

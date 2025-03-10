@@ -3,12 +3,11 @@ from hashlib import sha256
 from os import SEEK_END
 from typing import BinaryIO
 
+from app.config import logger
+from app.models import MetadataResponse
 from fastapi import HTTPException, UploadFile, status
 from PIL import Image
 from PIL.ExifTags import TAGS
-
-from app.config import logger
-from app.models import MetadataResponse
 
 
 async def parse_image_metadata(img: BinaryIO) -> dict[str, str]:

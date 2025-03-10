@@ -1,8 +1,7 @@
 import pytest
+from app.config import get_settings
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
-
-from app.config import get_settings
 
 
 @pytest.mark.anyio
@@ -14,6 +13,7 @@ async def test_upload_single_img(app: FastAPI):
     assert get_response.status_code != 200
 
     test_image = get_settings().TEST_STATIC_DIR / "test_img1.jpg"
+
     with open(test_image, "rb") as file:
         async with AsyncClient(
             transport=ASGITransport(app=app), base_url="http://test"
@@ -52,4 +52,3 @@ async def test_upload_multiple_imgs(app: FastAPI):
     assert data["count"] == 2
     assert "metadata_set" in data
     assert len(data["metadata_set"]) == 2
-

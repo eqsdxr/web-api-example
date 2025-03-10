@@ -19,7 +19,9 @@ class Settings(BaseSettings):
         extra="ignore",
     )
     # A directory for storing files used in tests
-    TEST_STATIC_DIR: Path = Path().parent.parent / "tests" / "static"
+    TEST_STATIC_DIR: Path = (
+        Path().parent.parent / "backend" / "tests" / "static"
+    )
     # Data that will be shown in Swagger UI
     APP_INFO: dict = {
         "title": "File metadata extractor API",
@@ -61,8 +63,7 @@ class Settings(BaseSettings):
                 "description": "No description",
                 "url": "https://broken_link.unknown",
             },
-        }
-
+        },
     ]
     # Cross-Origin Resource Sharing (CORS)
     ALLOWED_ORIGINS: list[str] = []

@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Depends, Request, UploadFile, status
-
 from app.config import limiter, logger
 from app.deps import get_current_user
 from app.models import MetadataResponseList
 from app.utils import get_file_info
+from fastapi import APIRouter, Depends, Request, UploadFile, status
 
 metadata_router = APIRouter(prefix="/metadata", tags=["metadata"])
 

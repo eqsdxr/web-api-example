@@ -1,6 +1,6 @@
 services:
   app:
-    build: .
+    build: ./backend
     ports:
       - "8000:8000"
     depends_on:
@@ -10,7 +10,7 @@ services:
     develop:
       watch:
         - action: sync
-          path: .
+          path: backend/
           target: .
           ignore:
             - .venv/

@@ -35,7 +35,6 @@ class UserResponse(SQLModel):
     username: str
 
 
-
 class UserIn(UserBase):
     username: str
 

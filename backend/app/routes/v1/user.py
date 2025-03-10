@@ -1,8 +1,7 @@
-from fastapi import APIRouter, Depends, Request, status
-
 from app.config import limiter, logger
 from app.deps import CurrentUser, get_current_user
 from app.models import UserResponse
+from fastapi import APIRouter, Depends, Request, status
 
 user_router = APIRouter(prefix="/users", tags=["user"])
 
