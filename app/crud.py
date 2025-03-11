@@ -6,7 +6,11 @@ from app.sec import get_password_hash, verify_password
 
 
 def authenticate(session: Session, username: str, password: str) -> User:
-    user = session.exec(select(User).where(User.username == username)).one()
+    user = session.exec(
+        select(User).where(User.username == username)
+    ).one_or_none()
+    # Keep users unaware if the password is wrong or the user doesn't exist
+    # for security reasons
     if user is None or not verify_password(password, user.hashed_password):
         raise HTTPException(
             status.HTTP_401_UNAUTHORIZED, "Invalid credentials"
