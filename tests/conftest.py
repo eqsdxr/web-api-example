@@ -18,7 +18,7 @@ async def app() -> FastAPI:
 def get_test_db() -> Generator[Session, None, None]:
     create_tables(engine)
     with Session(engine) as session:
-        create_first_user(session)
+        create_first_superuser_if_doesnt_exist(session)
         yield session
         session.commit()
 

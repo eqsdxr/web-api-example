@@ -11,7 +11,7 @@ def create_tables(engine):
     SQLModel.metadata.create_all(engine)
 
 
-def create_first_user(session: Session):
+def create_first_superuser_if_doesnt_exist(session: Session):
     user = session.exec(
         select(User).where(
             User.username == get_settings().FIRST_SUPERUSER_USERNAME
