@@ -16,9 +16,7 @@ def get_db() -> Generator[Session, None, None]:
         yield session
 
 
-reusable_oauth2 = OAuth2PasswordBearer(
-        tokenUrl="api/v1/login/access-token"
-)
+reusable_oauth2 = OAuth2PasswordBearer(tokenUrl="api/v1/login/access-token")
 
 SessionDep = Annotated[Session, Depends(get_db)]
 
@@ -43,4 +41,7 @@ def get_current_user(session: SessionDep, token: TokenDep):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
-    return user
+    return User(**user.model_dump())
+
+
+CurrentUser = Annotated[User, Depends(get_current_user)]
