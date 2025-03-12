@@ -35,6 +35,11 @@ class UserResponse(SQLModel):
     username: str
 
 
+class UsersPublic(BaseModel):
+    count: int
+    users: list[UserResponse]
+
+
 class UserIn(UserBase):
     username: str
 
