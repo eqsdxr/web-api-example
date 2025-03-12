@@ -4,6 +4,7 @@ from secrets import token_urlsafe
 from sys import stdout
 
 from loguru import logger
+from pydantic import computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from slowapi import Limiter
 from slowapi.util import get_remote_address
@@ -57,7 +58,24 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
-    DATABASE_URI: str = "sqlite:///sqlite.db"
+    POSTGRES_HOST: str
+    POSTGRES_PORT: str
+    POSTGRES_DB_NAME: str
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+
+    @computed_field
+    @property
+    def DATABASE_URI(self) -> str:
+        return (
+            f"postgresql+psycopg://"
+            f"{self.POSTGRES_USER}:"
+            f"{self.POSTGRES_PASSWORD}@"
+            f"{self.POSTGRES_HOST}:"
+            f"{self.POSTGRES_PORT}/"
+            f"{self.POSTGRES_DB_NAME}"
+        )
+
     FIRST_SUPERUSER_USERNAME: str = "superuser"
     FIRST_SUPERUSER_PASSWORD: str = "secret897"
 
@@ -66,4 +84,4 @@ class Settings(BaseSettings):
 # in endpoints, making it possible to override it in tests
 @lru_cache  # Optimize performance by caching
 def get_settings():
-    return Settings()
+    return Settings()  # type: ignore # Suppressing warning
