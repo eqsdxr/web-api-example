@@ -1,11 +1,10 @@
-"""empty message
+"""initial revision
 
-Revision ID: 2bea28140b82
-Revises: c6ab3a3a84e2
-Create Date: 2025-03-03 18:23:57.460579
+Revision ID: e942dfbdbd86
+Revises: 
+Create Date: 2025-03-12 18:21:49.603323
 
 """
-
 from typing import Sequence, Union
 
 import sqlalchemy as sa
@@ -13,8 +12,8 @@ import sqlmodel.sql.sqltypes
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "2bea28140b82"
-down_revision: Union[str, None] = "c6ab3a3a84e2"
+revision: str = "e942dfbdbd86"
+down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -32,6 +31,8 @@ def upgrade() -> None:
             sqlmodel.sql.sqltypes.AutoString(),
             nullable=False,
         ),
+        sa.Column("is_superuser", sa.Boolean(), nullable=False),
+        sa.Column("is_active", sa.Boolean(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(
