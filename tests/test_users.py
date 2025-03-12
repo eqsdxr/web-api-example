@@ -12,4 +12,4 @@ async def test_get_user_me(app: FastAPI):
     assert response.status_code == 200
     data = response.json()
     assert "id" in data and "username" in data
-    assert not "password_hash" in data
+    assert "password_hash" not in data
