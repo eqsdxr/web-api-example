@@ -21,6 +21,7 @@ def create_first_superuser_if_doesnt_exist(session: Session):
         user_create = UserCreate(
             username=get_settings().FIRST_SUPERUSER_USERNAME,
             password=get_settings().FIRST_SUPERUSER_PASSWORD,
+            is_superuser=True,
         )
         user = create_user(session=session, user_create=user_create)
 

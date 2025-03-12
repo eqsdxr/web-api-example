@@ -46,14 +46,20 @@ class UserIn(UserBase):
 
 class UserCreate(UserBase):
     username: str
+    is_superuser: bool = False
+    is_active: bool = True
 
 
 class UserUpdate(SQLModel):
     username: str | None = Field(default=None, min_length=5, max_length=50)
     password: str | None = Field(default=None, min_length=8, max_length=50)
+    is_superuser: bool | None = None
+    is_active: bool | None = None
 
 
 class User(SQLModel, table=True):
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     username: str = Field(index=True)
     hashed_password: str
+    is_superuser: bool
+    is_active: bool
