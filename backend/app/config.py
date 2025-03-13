@@ -2,6 +2,7 @@ from functools import lru_cache
 from pathlib import Path
 from secrets import token_urlsafe
 from sys import stdout
+from typing import Literal
 
 from loguru import logger
 from pydantic import computed_field
@@ -47,7 +48,23 @@ class Settings(BaseSettings):
                 "description": "No description",
                 "url": "https://broken_link.unknown",
             },
-        }
+        },
+        {
+            "name": "private",
+            "description": "Private operation endpoints.",
+            "external_docs": {
+                "description": "No description",
+                "url": "https://broken_link.unknown",
+            },
+        },
+        {
+            "name": "login",
+            "description": "Login operation endpoints.",
+            "external_docs": {
+                "description": "No description",
+                "url": "https://broken_link.unknown",
+            },
+        },
     ]
     # Cross-Origin Resource Sharing (CORS)
     ALLOWED_ORIGINS: list[str] = []
@@ -79,6 +96,8 @@ class Settings(BaseSettings):
 
     FIRST_SUPERUSER_USERNAME: str = "superuser"
     FIRST_SUPERUSER_PASSWORD: str = "secret897"
+
+    ENVIRONMENT: Literal["local", "staging", "deployment"]
 
 
 # Using a function for settings allows it to be used as a dependency
