@@ -1,8 +1,7 @@
-from sqlmodel import Session, create_engine, select
-
 from app.config import get_settings
 from app.crud import create_user
 from app.models import User, UserCreate
+from sqlmodel import Session, create_engine, select
 
 
 def create_tables(engine):

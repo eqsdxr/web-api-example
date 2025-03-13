@@ -14,6 +14,7 @@ limiter = Limiter(key_func=get_remote_address)
 
 
 class Settings(BaseSettings):
+    # For local development. For docker env data is passed in compose.yml
     model_config = SettingsConfigDict(
         env_file=".env",
         env_ignore_empty=True,
@@ -60,7 +61,7 @@ class Settings(BaseSettings):
 
     POSTGRES_HOST: str
     POSTGRES_PORT: str
-    POSTGRES_DB_NAME: str
+    POSTGRES_DB: str
     POSTGRES_USER: str
     POSTGRES_PASSWORD: str
 
@@ -73,7 +74,7 @@ class Settings(BaseSettings):
             f"{self.POSTGRES_PASSWORD}@"
             f"{self.POSTGRES_HOST}:"
             f"{self.POSTGRES_PORT}/"
-            f"{self.POSTGRES_DB_NAME}"
+            f"{self.POSTGRES_DB}"
         )
 
     FIRST_SUPERUSER_USERNAME: str = "superuser"

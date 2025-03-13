@@ -1,9 +1,5 @@
 from typing import Annotated, Generator
 
-from fastapi import Depends, FastAPI
-from pytest import fixture
-from sqlmodel import Session, select
-
 from app.config import get_settings
 from app.db import (
     create_first_superuser_if_doesnt_exist,
@@ -13,6 +9,9 @@ from app.db import (
 from app.deps import get_current_user, get_db
 from app.main import app as main_app
 from app.models import User
+from fastapi import Depends, FastAPI
+from pytest import fixture
+from sqlmodel import Session, select
 
 
 @fixture(scope="module")

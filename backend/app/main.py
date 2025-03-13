@@ -1,10 +1,9 @@
+from app.config import get_settings, limiter
+from app.routes import api_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
-
-from app.config import get_settings, limiter
-from app.routes import api_router
 
 # Turn off redoc docs, they are useless
 app = FastAPI(

@@ -1,6 +1,8 @@
 services:
-  app:
-    build: .
+  backend:
+    build: backend/
+    env_file:
+      - .env
     ports:
       - "8000:8000"
     depends_on:
@@ -13,7 +15,7 @@ services:
           path: .
           target: .
           ignore:
-            - .venv/
+            - backend/.venv/
         - action: rebuild
           path: uv.lock
   database:
@@ -26,6 +28,8 @@ services:
       timeout: 10s
     ports:
       - 15432:5432
+    volumes:
+      - database-data:/var/lib/postgresql/data/pgdata
     env_file:
       - .env
     networks:
@@ -35,6 +39,10 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
       - POSTGRES_USER=${POSTGRES_USER?Variable not set}
       - POSTGRES_DB=${POSTGRES_DB?Variable not set}
+      - POSTGRES_HOST=${POSTGRES_HOST?Variable not set}
+
+volumes:
+  database-data:
 
 networks: 
   postgres-network:

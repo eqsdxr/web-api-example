@@ -1,8 +1,7 @@
-from fastapi import HTTPException, status
-from sqlmodel import Session, select
-
 from app.models import User, UserCreate, UserResponse, UsersPublic
 from app.sec import get_password_hash, verify_password
+from fastapi import HTTPException, status
+from sqlmodel import Session, select
 
 
 def authenticate(session: Session, username: str, password: str) -> User:
