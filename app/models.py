@@ -4,19 +4,6 @@ from pydantic import BaseModel
 from sqlmodel import Field, SQLModel
 
 
-class MetadataResponse(BaseModel):
-    filename: str
-    size: int
-    content_type: str
-    metadata: dict[int | str, int | str]
-    hash: str
-
-
-class MetadataResponseList(BaseModel):
-    count: int
-    metadata_set: list[MetadataResponse]
-
-
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"

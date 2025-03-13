@@ -23,7 +23,7 @@ class Settings(BaseSettings):
     TEST_STATIC_DIR: Path = Path().parent.parent / "tests" / "static"
     # Data that will be shown in Swagger UI
     APP_INFO: dict = {
-        "title": "File metadata extractor API",
+        "title": "Project",
         "description": "No description.",  # Markdown
         "summary": "No summary.",
         "version": "0.0.1",
@@ -40,8 +40,8 @@ class Settings(BaseSettings):
     }
     TAG_METADATA: list[dict] = [
         {
-            "name": "metadata",
-            "description": "Metadata extracting operations.",
+            "name": "user",
+            "description": "User operation endpoints.",
             "external_docs": {
                 "description": "No description",
                 "url": "https://broken_link.unknown",
