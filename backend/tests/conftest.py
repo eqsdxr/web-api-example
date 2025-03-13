@@ -27,9 +27,14 @@ def get_test_db() -> Generator[Session, None, None]:
         session.commit()
 
 
-TestDBSessionDep = Annotated[Session, Depends(get_test_db)]
+@fixture(scope="function")
+def db_session() -> Generator[Session, None, None]:
+    yield from get_test_db()
+
 
 main_app.dependency_overrides[get_db] = get_test_db
+
+TestDBSessionDep = Annotated[Session, Depends(get_test_db)]
 
 
 def get_test_current_user(session: TestDBSessionDep) -> User:
