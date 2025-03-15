@@ -65,6 +65,14 @@ class Settings(BaseSettings):
                 "url": "https://broken_link.unknown",
             },
         },
+        {
+            "name": "utils",
+            "description": "Utils operation endpoints.",
+            "external_docs": {
+                "description": "No description",
+                "url": "https://broken_link.unknown",
+            },
+        },
     ]
     # Cross-Origin Resource Sharing (CORS)
     ALLOWED_ORIGINS: list[str] = []
