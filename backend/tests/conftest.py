@@ -49,3 +49,8 @@ def get_test_current_user(session: TestDBSessionDep) -> User:
 
 
 main_app.dependency_overrides[get_current_user] = get_test_current_user
+
+
+@fixture(scope="function")
+def test_user(db_session: TestDBSessionDep) -> User:
+    return get_test_current_user(db_session)
