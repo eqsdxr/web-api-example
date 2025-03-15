@@ -2,8 +2,6 @@ from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import jwt
-from app.config import get_settings
-from app.models import User
 from argon2 import PasswordHasher
 from argon2.exceptions import (
     InvalidHashError,
@@ -11,6 +9,9 @@ from argon2.exceptions import (
     VerifyMismatchError,
 )
 from sqlmodel import Session
+
+from app.config import get_settings
+from app.models import User
 
 ph = PasswordHasher()
 

@@ -1,5 +1,8 @@
 from uuid import UUID
 
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+from sqlmodel import select
+
 from app.config import limiter, logger
 from app.crud import create_user as crud_create_user
 from app.crud import delete_user as crud_delete_user
@@ -13,8 +16,6 @@ from app.deps import (
     get_current_user,
 )
 from app.models import User, UserCreate, UserResponse, UsersPublic, UserUpdate
-from fastapi import APIRouter, Depends, HTTPException, Request, status
-from sqlmodel import select
 
 user_router = APIRouter(prefix="/users", tags=["user"])
 

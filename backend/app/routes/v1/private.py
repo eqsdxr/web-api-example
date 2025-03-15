@@ -1,7 +1,8 @@
+from fastapi import APIRouter
+
 from app.crud import create_user
 from app.deps import SessionDep
 from app.models import UserCreate
-from fastapi import APIRouter
 
 private_router = APIRouter(prefix="/private", tags=["private"])
 

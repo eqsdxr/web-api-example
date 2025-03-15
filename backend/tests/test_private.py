@@ -1,8 +1,9 @@
 import pytest
-from app.models import User
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 from sqlmodel import Session, select
+
+from app.models import User
 
 
 @pytest.mark.anyio

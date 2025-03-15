@@ -1,7 +1,8 @@
-from app.models import User, UserCreate, UserResponse, UsersPublic, UserUpdate
-from app.sec import get_password_hash, verify_password
 from fastapi import HTTPException, status
 from sqlmodel import Session, func, select
+
+from app.models import User, UserCreate, UserResponse, UsersPublic, UserUpdate
+from app.sec import get_password_hash, verify_password
 
 
 def authenticate(session: Session, username: str, password: str) -> User:

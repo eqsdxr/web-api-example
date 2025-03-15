@@ -1,8 +1,9 @@
+from fastapi import APIRouter
+
 from app.config import get_settings
 from app.routes.v1.login import login_router
 from app.routes.v1.private import private_router
 from app.routes.v1.user import user_router
-from fastapi import APIRouter
 
 v1_router = APIRouter(prefix="/v1")
 

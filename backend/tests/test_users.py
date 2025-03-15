@@ -1,10 +1,11 @@
 import pytest
-from app.crud import create_user
-from app.models import User, UserCreate
-from app.sec import verify_password
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 from sqlmodel import Session, select
+
+from app.crud import create_user
+from app.models import User, UserCreate
+from app.sec import verify_password
 
 
 @pytest.mark.anyio
