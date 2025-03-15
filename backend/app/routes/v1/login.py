@@ -19,7 +19,7 @@ login_router = APIRouter(prefix="/login", tags=["login"])
     response_model=Token,
     status_code=status.HTTP_200_OK,
 )
-@limiter.limit("5/minute")
+@limiter.limit("10/minute")  # May cause 'limit exceeded' errors during testing
 async def login(
     request: Request,
     session: SessionDep,

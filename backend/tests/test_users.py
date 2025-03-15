@@ -1,6 +1,4 @@
-import pytest
-from fastapi import FastAPI
-from httpx import ASGITransport, AsyncClient
+from fastapi.testclient import TestClient
 from sqlmodel import Session, select
 
 from app.crud import create_user
@@ -8,47 +6,45 @@ from app.models import User, UserCreate
 from app.sec import verify_password
 
 
-@pytest.mark.anyio
-async def test_get_user_me(app: FastAPI):
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as ac:
-        response = await ac.get("api/v1/users/me")
+def test_get_user_me(
+    client: TestClient, superuser_token_headers: dict[str, str]
+):
+    response = client.get("api/v1/users/me", headers=superuser_token_headers)
     assert response.status_code == 200
     data = response.json()
     assert "id" in data and "username" in data
     assert "password_hash" not in data
 
 
-@pytest.mark.anyio
-async def test_get_users(app: FastAPI):
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as ac:
-        response = await ac.get("api/v1/users/")
+def test_get_users(
+    client: TestClient, superuser_token_headers: dict[str, str]
+):
+    response = client.get("api/v1/users/", headers=superuser_token_headers)
     assert response.status_code == 200
     data = response.json()
     assert "count" in data
     assert "users" in data
 
 
-@pytest.mark.anyio
-async def test_create_user(app: FastAPI):
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as ac:
-        response = await ac.post(
-            "api/v1/users/",
-            json={"username": "vampire999", "password": "dark_streets"},
-        )
+def test_create_user(
+    client: TestClient, superuser_token_headers: dict[str, str]
+):
+    response = client.post(
+        "api/v1/users/",
+        json={"username": "vampire999", "password": "dark_streets"},
+        headers=superuser_token_headers,
+    )
     assert response.status_code == 201
     data = response.json()
     assert data["username"] == "vampire999"
     assert "id" in data
 
 
-@pytest.mark.anyio
-async def test_update_user(app: FastAPI, db_session: Session):
+def test_update_user(
+    client: TestClient,
+    db_session: Session,
+    superuser_token_headers: dict[str, str],
+):
     user = create_user(
         db_session, UserCreate(username="human000", password="bright_days")
     )
@@ -62,13 +58,11 @@ async def test_update_user(app: FastAPI, db_session: Session):
     assert created_user
     assert created_user.username == "human000"
 
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as ac:
-        response = await ac.patch(
-            f"api/v1/users/{user.id}",
-            json={"username": "vampire999", "password": "dark_streets"},
-        )
+    response = client.patch(
+        f"api/v1/users/{user.id}",
+        json={"username": "vampire999", "password": "dark_streets"},
+        headers=superuser_token_headers,
+    )
     assert response.status_code == 202
     data = response.json()
     assert data["username"] == "vampire999"
@@ -79,37 +73,37 @@ async def test_update_user(app: FastAPI, db_session: Session):
     assert db_user.is_superuser is not True
 
 
-@pytest.mark.anyio
-async def test_update_user_me(
-    app: FastAPI, db_session: Session, test_user: User
+def test_update_user_me(
+    client: TestClient,
+    db_session: Session,
+    superuser_token_headers: dict[str, str],
 ):
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as ac:
-        response = await ac.patch(
-            "api/v1/users/me",
-            json={"username": "vampire999", "password": "dark_streets"},
-        )
+    response = client.patch(
+        "api/v1/users/me",
+        json={"username": "vampire999", "password": "dark_streets"},
+        headers=superuser_token_headers,
+    )
     assert response.status_code == 202
-    db_session.refresh(test_user)
-    assert test_user.username == "vampire999"
-    assert verify_password("dark_streets", test_user.hashed_password)
+    data = response.json()
+    assert data["username"] == "vampire999"
+    user = db_session.exec(select(User).where(User.id == data["id"])).one()
+    assert verify_password("dark_streets", user.hashed_password)
 
 
-@pytest.mark.anyio
-async def test_delete_user(app: FastAPI, db_session: Session):
+def test_delete_user(
+    client: TestClient,
+    db_session: Session,
+    superuser_token_headers: dict[str, str],
+):
     user = create_user(
         db_session, UserCreate(username="human000", password="bright_days")
     )
 
     user_id = user.id  # Save id to check user when it's supposed to be deleted
 
-    async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test"
-    ) as ac:
-        response = await ac.delete(
-            f"api/v1/users/{user.id}",
-        )
+    response = client.delete(
+        f"api/v1/users/{user.id}", headers=superuser_token_headers
+    )
     assert response.status_code == 202
     db_session.expire_all()
     deleted_user = db_session.get(User, user_id)

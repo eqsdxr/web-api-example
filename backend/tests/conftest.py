@@ -1,23 +1,24 @@
 from typing import Annotated, Generator
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends
+from fastapi.testclient import TestClient
 from pytest import fixture
-from sqlmodel import Session, select
+from sqlmodel import Session
 
-from app.config import get_settings
 from app.db import (
     create_first_superuser_if_doesnt_exist,
     create_tables,
     engine,
 )
-from app.deps import get_current_user, get_db
-from app.main import app as main_app
-from app.models import User
+from app.deps import get_db
+from app.main import app as app
+from tests.utils import get_superuser_token_headers
 
 
 @fixture(scope="module")
-async def app() -> FastAPI:
-    return main_app
+def client() -> Generator[TestClient, None, None]:
+    with TestClient(app) as c:
+        yield c
 
 
 def get_test_db() -> Generator[Session, None, None]:
@@ -33,25 +34,11 @@ def db_session() -> Generator[Session, None, None]:
     yield from get_test_db()
 
 
-main_app.dependency_overrides[get_db] = get_test_db
+app.dependency_overrides[get_db] = get_test_db
 
 TestDBSessionDep = Annotated[Session, Depends(get_test_db)]
 
 
-def get_test_current_user(session: TestDBSessionDep) -> User:
-    user = session.exec(
-        select(User).where(
-            User.username == get_settings().FIRST_SUPERUSER_USERNAME
-        )
-    ).first()
-    if not user:
-        raise ValueError("No test user found in database")
-    return user
-
-
-main_app.dependency_overrides[get_current_user] = get_test_current_user
-
-
 @fixture(scope="function")
-def test_user(db_session: TestDBSessionDep) -> User:
-    return get_test_current_user(db_session)
+def superuser_token_headers(client: TestClient) -> dict[str, str]:
+    return get_superuser_token_headers(client)
