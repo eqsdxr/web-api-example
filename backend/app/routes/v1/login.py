@@ -2,7 +2,7 @@ from datetime import timedelta
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Request, status
-from fastapi.security import OAuth2PasswordRequestFormStrict
+from fastapi.security import OAuth2PasswordRequestForm
 
 from app.config import get_settings, limiter, logger
 from app.crud import authenticate
@@ -23,7 +23,7 @@ login_router = APIRouter(prefix="/login", tags=["login"])
 async def login(
     request: Request,
     session: SessionDep,
-    form_data: Annotated[OAuth2PasswordRequestFormStrict, Depends()],
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
     _ = request  # Stop showing the warning
     user = authenticate(
