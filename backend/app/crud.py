@@ -1,7 +1,7 @@
-from app.models import User, UserCreate, UserResponse, UsersPublic
+from app.models import User, UserCreate, UserResponse, UsersPublic, UserUpdate
 from app.sec import get_password_hash, verify_password
 from fastapi import HTTPException, status
-from sqlmodel import Session, select
+from sqlmodel import Session, func, select
 
 
 def authenticate(session: Session, username: str, password: str) -> User:
@@ -28,11 +28,30 @@ def create_user(session: Session, user_create: UserCreate) -> User:
     return db_obj
 
 
+def update_user(
+    session: Session, db_user: User, user_update: UserUpdate
+) -> User:
+    data = user_update.model_dump(exclude_unset=True)
+    extra = {}
+    if "password" in data:
+        extra["hashed_password"] = get_password_hash(data["password"])
+    db_user.sqlmodel_update(data, update=extra)
+    session.add(db_user)
+    session.commit()
+    session.refresh(db_user)
+    return db_user
+
+
 def retrieve_users(
     session: Session, offset: int = 0, limit: int = 100
 ) -> UsersPublic:
     db_users = session.exec(select(User).offset(offset).limit(limit))
-    public_users = [
-        UserResponse(**db_user.model_dump()) for db_user in db_users
-    ]
-    return UsersPublic(count=len(public_users), users=public_users)
+    users = [UserResponse(**db_user.model_dump()) for db_user in db_users]
+    count = session.exec(select(func.count()).select_from(User)).one()
+    return UsersPublic(count=count, users=users)
+
+
+def delete_user(session: Session, user: User) -> None:
+    session.delete(user)
+    session.commit()
+    session.expire_all()

@@ -43,4 +43,16 @@ def get_current_user(session: SessionDep, token: TokenDep):
     return User(**user.model_dump())
 
 
-CurrentUser = Annotated[User, Depends(get_current_user)]
+CurrentUserDep = Annotated[User, Depends(get_current_user)]
+
+
+def get_current_superuser(user: CurrentUserDep):
+    if not user.is_superuser:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You don't have enough rights",
+        )
+    return user
+
+
+SuperuserDep = Annotated[User, Depends(get_current_superuser)]
