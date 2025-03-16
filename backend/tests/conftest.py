@@ -1,6 +1,5 @@
-from typing import Annotated, Generator
+from typing import Generator
 
-from fastapi import Depends
 from fastapi.testclient import TestClient
 from pytest import fixture
 from sqlmodel import Session
@@ -35,8 +34,6 @@ def db_session() -> Generator[Session, None, None]:
 
 
 app.dependency_overrides[get_db] = get_test_db
-
-TestDBSessionDep = Annotated[Session, Depends(get_test_db)]
 
 
 @fixture(scope="function")
