@@ -17,7 +17,7 @@ def client() -> Generator[TestClient, None, None]:
         yield c
 
 
-@fixture(scope="session", autouse=True)
+@fixture(scope="function", autouse=True)
 def db_session() -> Generator[Session, None, None]:
     with Session(engine) as session:
         init_db(session)

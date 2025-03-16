@@ -7,6 +7,8 @@ from sqlmodel import SQLModel, Session, select
 
 
 def init_db(session: Session):
+    # Reset db
+    SQLModel.metadata.drop_all(engine)
     # Create tables
     SQLModel.metadata.create_all(engine)
     # Create superuser
