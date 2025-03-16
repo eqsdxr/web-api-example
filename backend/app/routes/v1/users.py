@@ -69,6 +69,15 @@ async def create_user(
     user: UserCreate,
 ) -> UserResponse:
     _ = request
+    if user.username:
+        user_with_this_username = session.exec(
+            select(User).where(User.username == user.username)
+        ).first()
+        if user_with_this_username:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="User with this username already exists",
+            )
     created_user = crud_create_user(session, user)
     return UserResponse(**created_user.model_dump())
 
@@ -88,6 +97,15 @@ async def update_user_me(
     user_update: UserUpdate,
 ) -> UserResponse:
     _ = request
+    if user_update.username:
+        user_with_this_username = session.exec(
+            select(User).where(User.username == user_update.username)
+        ).first()
+        if user_with_this_username:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="User with this username already exists",
+            )
     user = session.exec(
         select(User).where(User.id == current_superuser.id)
     ).one()
@@ -116,6 +134,15 @@ async def update_user(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User with this id not found",
         )
+    if user_update.username:
+        user_with_this_username = session.exec(
+            select(User).where(User.username == user_update.username)
+        ).first()
+        if user_with_this_username:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="User with this username already exists",
+            )
     updated_user = crud_update_user(session, user, user_update)
     return UserResponse(**updated_user.model_dump())
 
