@@ -17,11 +17,11 @@ from app.deps import (
 )
 from app.models import User, UserCreate, UserResponse, UsersPublic, UserUpdate
 
-user_router = APIRouter(prefix="/users", tags=["user"])
+users_router = APIRouter(prefix="/users", tags=["user"])
 
 
 @logger.catch  # Catch unexpected exceptions
-@user_router.get(
+@users_router.get(
     "/me",
     response_model=UserResponse,
     status_code=status.HTTP_200_OK,
@@ -37,7 +37,7 @@ async def get_user_me(
 
 
 @logger.catch
-@user_router.get(
+@users_router.get(
     "/",
     response_model=UsersPublic,
     status_code=status.HTTP_200_OK,
@@ -56,7 +56,7 @@ async def get_users(
 
 
 @logger.catch
-@user_router.post(
+@users_router.post(
     "/",
     response_model=UserResponse,
     status_code=status.HTTP_201_CREATED,
@@ -74,7 +74,7 @@ async def create_user(
 
 
 @logger.catch
-@user_router.patch(
+@users_router.patch(
     "/me",
     response_model=UserResponse,
     status_code=status.HTTP_202_ACCEPTED,
@@ -96,7 +96,7 @@ async def update_user_me(
 
 
 @logger.catch
-@user_router.patch(
+@users_router.patch(
     "/{user_id}",
     response_model=UserResponse,
     status_code=status.HTTP_202_ACCEPTED,
@@ -121,7 +121,7 @@ async def update_user(
 
 
 @logger.catch
-@user_router.delete(
+@users_router.delete(
     "/{user_id}",
     status_code=status.HTTP_202_ACCEPTED,
     dependencies=[Depends(get_current_superuser)],
