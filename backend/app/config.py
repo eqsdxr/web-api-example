@@ -1,7 +1,6 @@
 from functools import lru_cache
 from pathlib import Path
 from secrets import token_urlsafe
-from sys import stdout
 from typing import Literal
 
 from loguru import logger
@@ -10,7 +9,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
-logger.add(stdout, colorize=True, level="INFO")
+# Logs will be at /app/logs in a docker container
+logger.add("logs/file.log", rotation="50 MB")
 limiter = Limiter(key_func=get_remote_address)
 
 
