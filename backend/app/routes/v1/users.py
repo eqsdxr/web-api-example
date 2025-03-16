@@ -4,10 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlmodel import select
 
 from app.config import limiter, logger
-from app.crud import create_user as crud_create_user
-from app.crud import delete_user as crud_delete_user
-from app.crud import retrieve_users
-from app.crud import update_user as crud_update_user
+from app import crud
 from app.deps import (
     CurrentUserDep,
     SessionDep,
@@ -51,7 +48,7 @@ async def get_users(
     limit: int = 100,
 ) -> UsersPublic:
     _ = request
-    result = retrieve_users(session, offset, limit)
+    result = crud.retrieve_users(session, offset, limit)
     return result
 
 
@@ -78,7 +75,7 @@ async def create_user(
                 status_code=status.HTTP_409_CONFLICT,
                 detail="User with this username already exists",
             )
-    created_user = crud_create_user(session, user)
+    created_user = crud.create_user(session, user)
     return UserPublic(**created_user.model_dump())
 
 
@@ -109,7 +106,7 @@ async def update_user_me(
     user = session.exec(
         select(User).where(User.id == current_superuser.id)
     ).one()
-    updated_user = crud_update_user(session, user, user_update)
+    updated_user = crud.update_user(session, user, user_update)
     return UserPublic(**updated_user.model_dump())
 
 
@@ -143,7 +140,7 @@ async def update_user(
                 status_code=status.HTTP_409_CONFLICT,
                 detail="User with this username already exists",
             )
-    updated_user = crud_update_user(session, user, user_update)
+    updated_user = crud.update_user(session, user, user_update)
     return UserPublic(**updated_user.model_dump())
 
 
@@ -172,5 +169,5 @@ async def delete_user(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User with this id not found",
         )
-    crud_delete_user(session, user)
+    crud.delete_user(session, user)
     return f"User with id {user_id} deleted successfully"
