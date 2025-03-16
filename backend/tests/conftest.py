@@ -33,6 +33,7 @@ def db_session() -> Generator[Session, None, None]:
     yield from get_test_db()
 
 
+# Override with one which creates tables and a superuser
 app.dependency_overrides[get_db] = get_test_db
 
 
