@@ -5,13 +5,11 @@ from pytest import fixture
 from sqlmodel import Session
 
 from app.db import (
-    create_first_superuser_if_doesnt_exist,
-    create_tables,
     engine,
 )
 from app.deps import get_db
 from app.main import app as app
-from tests.utils import get_superuser_token_headers
+from tests.utils import get_superuser_token_headers, init_db
 
 
 @fixture(scope="module")
@@ -21,9 +19,8 @@ def client() -> Generator[TestClient, None, None]:
 
 
 def get_test_db() -> Generator[Session, None, None]:
-    create_tables(engine)
     with Session(engine) as session:
-        create_first_superuser_if_doesnt_exist(session)
+        init_db(session)
         yield session
         session.commit()
 
