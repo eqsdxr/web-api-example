@@ -17,14 +17,14 @@ class UserBase(SQLModel):
     password: str = Field(min_length=8, max_length=50)
 
 
-class UserResponse(SQLModel):
+class UserPublic(SQLModel):
     id: UUID
     username: str
 
 
 class UsersPublic(BaseModel):
     count: int
-    users: list[UserResponse]
+    users: list[UserPublic]
 
 
 class UserIn(UserBase):

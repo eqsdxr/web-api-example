@@ -15,7 +15,7 @@ from app.deps import (
     get_current_superuser,
     get_current_user,
 )
-from app.models import User, UserCreate, UserResponse, UsersPublic, UserUpdate
+from app.models import User, UserCreate, UserPublic, UsersPublic, UserUpdate
 
 users_router = APIRouter(prefix="/users", tags=["user"])
 
@@ -23,7 +23,7 @@ users_router = APIRouter(prefix="/users", tags=["user"])
 @logger.catch  # Catch unexpected exceptions
 @users_router.get(
     "/me",
-    response_model=UserResponse,
+    response_model=UserPublic,
     status_code=status.HTTP_200_OK,
     dependencies=[Depends(get_current_user)],
 )
@@ -31,9 +31,9 @@ users_router = APIRouter(prefix="/users", tags=["user"])
 async def get_user_me(
     current_user: CurrentUserDep,
     request: Request,
-) -> UserResponse:
+) -> UserPublic:
     _ = request
-    return UserResponse(**current_user.model_dump())
+    return UserPublic(**current_user.model_dump())
 
 
 @logger.catch
@@ -58,7 +58,7 @@ async def get_users(
 @logger.catch
 @users_router.post(
     "/",
-    response_model=UserResponse,
+    response_model=UserPublic,
     status_code=status.HTTP_201_CREATED,
     dependencies=[Depends(get_current_superuser)],
 )
@@ -67,7 +67,7 @@ async def create_user(
     request: Request,
     session: SessionDep,
     user: UserCreate,
-) -> UserResponse:
+) -> UserPublic:
     _ = request
     if user.username:
         user_with_this_username = session.exec(
@@ -79,13 +79,13 @@ async def create_user(
                 detail="User with this username already exists",
             )
     created_user = crud_create_user(session, user)
-    return UserResponse(**created_user.model_dump())
+    return UserPublic(**created_user.model_dump())
 
 
 @logger.catch
 @users_router.patch(
     "/me",
-    response_model=UserResponse,
+    response_model=UserPublic,
     status_code=status.HTTP_202_ACCEPTED,
     dependencies=[Depends(get_current_superuser)],
 )
@@ -95,7 +95,7 @@ async def update_user_me(
     current_superuser: SuperuserDep,
     session: SessionDep,
     user_update: UserUpdate,
-) -> UserResponse:
+) -> UserPublic:
     _ = request
     if user_update.username:
         user_with_this_username = session.exec(
@@ -110,13 +110,13 @@ async def update_user_me(
         select(User).where(User.id == current_superuser.id)
     ).one()
     updated_user = crud_update_user(session, user, user_update)
-    return UserResponse(**updated_user.model_dump())
+    return UserPublic(**updated_user.model_dump())
 
 
 @logger.catch
 @users_router.patch(
     "/{user_id}",
-    response_model=UserResponse,
+    response_model=UserPublic,
     status_code=status.HTTP_202_ACCEPTED,
     dependencies=[Depends(get_current_superuser)],
 )
@@ -126,7 +126,7 @@ async def update_user(
     session: SessionDep,
     user_id: UUID,
     user_update: UserUpdate,
-) -> UserResponse:
+) -> UserPublic:
     _ = request
     user = session.get(User, user_id)
     if not user:
@@ -144,7 +144,7 @@ async def update_user(
                 detail="User with this username already exists",
             )
     updated_user = crud_update_user(session, user, user_update)
-    return UserResponse(**updated_user.model_dump())
+    return UserPublic(**updated_user.model_dump())
 
 
 @logger.catch

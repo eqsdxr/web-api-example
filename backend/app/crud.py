@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from sqlmodel import Session, func, select
 
-from app.models import User, UserCreate, UserResponse, UsersPublic, UserUpdate
+from app.models import User, UserCreate, UserPublic, UsersPublic, UserUpdate
 from app.sec import get_password_hash, verify_password
 
 
@@ -47,7 +47,7 @@ def retrieve_users(
     session: Session, offset: int = 0, limit: int = 100
 ) -> UsersPublic:
     db_users = session.exec(select(User).offset(offset).limit(limit))
-    users = [UserResponse(**db_user.model_dump()) for db_user in db_users]
+    users = [UserPublic(**db_user.model_dump()) for db_user in db_users]
     count = session.exec(select(func.count()).select_from(User)).one()
     return UsersPublic(count=count, users=users)
 
