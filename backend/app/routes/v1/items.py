@@ -77,3 +77,32 @@ def create_item(
     _ = request
     item = crud.create_item(session, item_create, current_user.id)
     return models.ItemPublic(**item.model_dump())
+
+
+@limiter.limit("5/minute")
+@items_router.patch(
+    "/{item_id}",
+    response_model=models.ItemPublic,
+    status_code=status.HTTP_200_OK,
+    dependencies=[Depends(get_current_user)],
+)
+def update_item(
+    request: Request,
+    session: SessionDep,
+    current_user: CurrentUserDep,
+    item_update: models.ItemUpdate,
+    item_id: UUID,
+) -> models.ItemPublic:
+    _ = request
+    db_item = session.get(models.Item, item_id)
+    if not db_item or db_item.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Item with this id not found",
+        )
+    data = item_update.model_dump(exclude_unset=True)
+    db_item.sqlmodel_update(data)
+    session.add(db_item)
+    session.commit()
+    session.refresh(db_item)
+    return models.ItemPublic(**db_item.model_dump())
