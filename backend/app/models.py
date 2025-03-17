@@ -68,6 +68,7 @@ class ItemCreate(BaseModel):
 class ItemPublic(BaseModel):
     id: UUID
     title: str
+    description: str | None = Field(default=None, max_length=5000)
 
 
 class ItemsPublic(BaseModel):
@@ -77,6 +78,7 @@ class ItemsPublic(BaseModel):
 class Item(SQLModel, table=True):
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     title: str = Field(max_length=255)
+    description: str | None = Field(default=None, max_length=5000)
     owner_id: UUID = Field(
         foreign_key="user.id", nullable=True, ondelete="CASCADE"
     )
