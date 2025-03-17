@@ -67,7 +67,7 @@ class ItemCreate(BaseModel):
 
 class ItemPublic(BaseModel):
     id: UUID
-    ownder_id: UUID
+    title: str
 
 
 class ItemsPublic(BaseModel):
