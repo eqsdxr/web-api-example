@@ -65,7 +65,7 @@ def get_item(
 @items_router.post(
     "/",
     response_model=models.ItemPublic,
-    status_code=status.HTTP_200_OK,
+    status_code=status.HTTP_201_CREATED,
     dependencies=[Depends(get_current_user)],
 )
 def create_item(

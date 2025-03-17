@@ -4,16 +4,16 @@ from fastapi.testclient import TestClient
 def test_get_items(
     client: TestClient, superuser_token_headers: dict[str, str]
 ):
-    response = client.post(
+    created_response = client.post(
         "api/v1/items/",
         json={"title": "fallen star"},
         headers=superuser_token_headers,
     )
-    assert response.status_code == 200
-    created_item_data = response.json()
+    assert created_response.status_code == 201
+    created_item_data = created_response.json()
     assert "id" in created_item_data
-    response = client.get("api/v1/items/", headers=superuser_token_headers)
-    get_item_data = response.json()
+    get_response = client.get("api/v1/items/", headers=superuser_token_headers)
+    get_item_data = get_response.json()
     assert len(get_item_data["data"]) == 1
     assert get_item_data["data"][0]["title"] == "fallen star"
 
@@ -24,7 +24,7 @@ def test_get_item(client: TestClient, superuser_token_headers: dict[str, str]):
         json={"title": "cool song"},
         headers=superuser_token_headers,
     )
-    assert create_response.status_code == 200
+    assert create_response.status_code == 201
     create_data = create_response.json()
     assert create_data["title"] == "cool song"
     assert create_data["id"]
@@ -48,7 +48,7 @@ def test_create_item(
         },
         headers=superuser_token_headers,
     )
-    assert create_response.status_code == 200
+    assert create_response.status_code == 201
     create_data = create_response.json()
     assert create_data["title"] == "good code"
     assert create_data["description"] == "It was me who wrote that."
@@ -63,7 +63,7 @@ def test_update_item(
         json={"title": "pretty picture"},
         headers=superuser_token_headers,
     )
-    assert create_response.status_code == 200
+    assert create_response.status_code == 201
     create_data = create_response.json()
     assert create_data["title"] == "pretty picture"
     assert create_data["id"]
