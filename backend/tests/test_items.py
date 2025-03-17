@@ -18,6 +18,25 @@ def test_get_items(
     assert get_item_data["data"][0]["title"] == "fallen star"
 
 
+def test_get_item(client: TestClient, superuser_token_headers: dict[str, str]):
+    create_response = client.post(
+        "api/v1/items/",
+        json={"title": "cool song"},
+        headers=superuser_token_headers,
+    )
+    assert create_response.status_code == 200
+    create_data = create_response.json()
+    assert create_data["title"] == "cool song"
+    assert create_data["id"]
+    get_response = client.get(
+        f"api/v1/items/{create_data['id']}",
+        headers=superuser_token_headers,
+    )
+    assert get_response.status_code == 200
+    update_data = get_response.json()
+    assert update_data["title"] == "cool song"
+
+
 def test_update_item(
     client: TestClient, superuser_token_headers: dict[str, str]
 ):
