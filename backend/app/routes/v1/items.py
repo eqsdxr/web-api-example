@@ -23,7 +23,7 @@ def get_items(
     current_user: CurrentUserDep,
     offset: int = Query(default=0, gt=-1),
     limit: int = 100,
-):
+) -> models.ItemsPublic:
     _ = request
     items = session.exec(
         select(models.Item)
@@ -48,7 +48,7 @@ def get_item(
     session: SessionDep,
     current_user: CurrentUserDep,
     item_id: UUID,
-):
+) -> models.ItemPublic:
     _ = request
     item = session.exec(
         select(models.Item).where(models.Item.id == item_id)
@@ -73,7 +73,7 @@ def create_item(
     session: SessionDep,
     current_user: CurrentUserDep,
     item_create: models.ItemCreate,
-):
+) -> models.ItemPublic:
     _ = request
     item = crud.create_item(session, item_create, current_user.id)
     return models.ItemPublic(**item.model_dump())
