@@ -1,4 +1,7 @@
 from fastapi.testclient import TestClient
+from sqlmodel import Session
+
+from app.models import Item
 
 
 def test_get_items(
@@ -75,3 +78,26 @@ def test_update_item(
     assert update_response.status_code == 200
     update_data = update_response.json()
     assert update_data["title"] == "ugly picture"
+
+
+def test_delete_item(
+    client: TestClient,
+    superuser_token_headers: dict[str, str],
+    db_session: Session,
+):
+    create_response = client.post(
+        "api/v1/items/",
+        json={"title": "picture of dawn"},
+        headers=superuser_token_headers,
+    )
+    assert create_response.status_code == 201
+    create_data = create_response.json()
+    assert create_data["title"] == "picture of dawn"
+    assert create_data["id"]
+    deleted_response = client.delete(
+        f"api/v1/items/{create_data['id']}",
+        headers=superuser_token_headers,
+    )
+    assert deleted_response.status_code == 200
+    deleted_item = db_session.get(Item, create_data["id"])
+    assert deleted_item is None

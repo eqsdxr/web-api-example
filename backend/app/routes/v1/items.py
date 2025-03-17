@@ -106,3 +106,28 @@ def update_item(
     session.commit()
     session.refresh(db_item)
     return models.ItemPublic(**db_item.model_dump())
+
+
+@limiter.limit("5/minute")
+@items_router.delete(
+    "/{item_id}",
+    status_code=status.HTTP_200_OK,
+    dependencies=[Depends(get_current_user)],
+)
+def delete_item(
+    request: Request,
+    session: SessionDep,
+    current_user: CurrentUserDep,
+    item_id: UUID,
+) -> str:
+    _ = request
+    db_item = session.get(models.Item, item_id)
+    if not db_item or db_item.owner_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Item with this id not found",
+        )
+    session.delete(db_item)
+    session.commit()
+    session.expire_all()
+    return "Item was deleted"
