@@ -1,4 +1,4 @@
-The project was made for learning purposes.
+This project was build for learning purposes. I learned - so can you.
 
 I expect you to troubleshoot everything yourself when starting this project. Here's a brief explanation of tasks you may need to do:
 
