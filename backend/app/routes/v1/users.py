@@ -83,7 +83,7 @@ async def create_user(
 @users_router.patch(
     "/me",
     response_model=UserPublic,
-    status_code=status.HTTP_202_ACCEPTED,
+    status_code=status.HTTP_200_OK,
     dependencies=[Depends(get_current_superuser)],
 )
 @limiter.limit("5/minute")
@@ -114,7 +114,7 @@ async def update_user_me(
 @users_router.patch(
     "/{user_id}",
     response_model=UserPublic,
-    status_code=status.HTTP_202_ACCEPTED,
+    status_code=status.HTTP_200_OK,
     dependencies=[Depends(get_current_superuser)],
 )
 @limiter.limit("5/minute")
@@ -147,7 +147,7 @@ async def update_user(
 @logger.catch
 @users_router.delete(
     "/{user_id}",
-    status_code=status.HTTP_202_ACCEPTED,
+    status_code=status.HTTP_200_OK,
     dependencies=[Depends(get_current_superuser)],
 )
 @limiter.limit("5/minute")

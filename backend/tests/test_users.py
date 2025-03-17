@@ -63,7 +63,7 @@ def test_update_user(
         json={"username": "vampire999", "password": "dark_streets"},
         headers=superuser_token_headers,
     )
-    assert response.status_code == 202
+    assert response.status_code == 200
     data = response.json()
     assert data["username"] == "vampire999"
     db_user = db_session.get(User, user.id)
@@ -83,7 +83,7 @@ def test_update_user_me(
         json={"username": "vampire999", "password": "dark_streets"},
         headers=superuser_token_headers,
     )
-    assert response.status_code == 202
+    assert response.status_code == 200
     data = response.json()
     assert data["username"] == "vampire999"
     user = db_session.exec(select(User).where(User.id == data["id"])).one()
@@ -104,7 +104,7 @@ def test_delete_user(
     response = client.delete(
         f"api/v1/users/{user.id}", headers=superuser_token_headers
     )
-    assert response.status_code == 202
+    assert response.status_code == 200
     db_session.expire_all()
     deleted_user = db_session.get(User, user_id)
     assert deleted_user is None
