@@ -2,10 +2,25 @@ This project was build for learning purposes. I learned - so can you.
 
 I expect you to troubleshoot everything yourself when starting this project. Here's a brief explanation of tasks you may need to do:
 
-- Use `uv venv` and `uv sync` inside the backend folder to install dependencies.
-- Run `alembic upgrade head` inside a running Docker container with the backend to create tables in the PostgreSQL database.
-- Use private endpoints to create users.
-- To run tests inside a Docker container, use `bash scripts/test.sh` (you may need to use it with `sudo`).
-- Use `pre-commit install` to set up pre-commit hooks.
+- Install dependencies inside the `backend` folder:
+```bash
+uv venv && uv sync
+```
 - Create a .env file in the same directory as .env-example.
-- Use `docker compose build` and `docker compose up` to run the project in docker (again, you may need to use `sudo`).
+- Run db migrations inside a Docker container with the backend:
+```bash
+alembic upgrade head
+```
+- Run tests inside a Docker container (you may need `sudo`):
+```bash
+bash scripts/test.sh
+```
+- Build and run the project with Docker (again, you may need to use `sudo`):
+```bash
+docker compose build && docker compose up
+```
+- Use private endpoints to create users.
+- Set up pre-commit hooks:
+```bash
+pre-commit install
+```
