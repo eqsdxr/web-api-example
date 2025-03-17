@@ -1,5 +1,10 @@
 The project was made for learning purposes.
 
-- Use alembic to create tables
-- Use private endpoints to create users
-- To run tests (in docker container) use `sudo bash scripts/test.sh`
+I expect you to troubleshoot everything yourself when starting this project. Here’s a brief explanation of tasks you may need to do:
+
+- Use `uv venv` and `uv sync` inside the backend folder to install dependencies.
+- Run `alembic upgrade head` inside a running Docker container with the backend to create tables in the PostgreSQL database.
+- Use private endpoints to create users.
+- To run tests inside a Docker container, use `bash scripts/test.sh` (you may need to use it with `sudo`).
+- Use `pre-commit install` to set up pre-commit hooks.
+- Create a .env file in the same directory as .env-example.
