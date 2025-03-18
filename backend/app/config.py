@@ -110,6 +110,6 @@ class Settings(BaseSettings):
 
 # Using a function for settings allows it to be used as a dependency
 # in endpoints, making it possible to override it in tests
-@lru_cache  # Optimize performance by caching
+@lru_cache(maxsize=1)  # Optimize performance by caching
 def get_settings():
     return Settings()  # type: ignore # Suppressing warning
