@@ -9,7 +9,7 @@ Project Highlights:
 - Rate limiter
 - JWT Authentication
 
-I expect you to troubleshoot everything yourself when starting this project. Here's a brief explanation of tasks you may need to do:
+I tested this on Debian 12. I expect you to troubleshoot everything yourself when starting this project. Here's a brief explanation of tasks you may need to do:
 
 - Install dependencies inside the `backend` folder:
 ```bash
