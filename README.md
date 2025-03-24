@@ -1,4 +1,4 @@
-This project was build for learning purposes. I learned - so can you.
+This project was build for learning purposes.
 
 Project Highlights:
 - FastAPI
