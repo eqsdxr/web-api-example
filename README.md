@@ -15,21 +15,21 @@ I tested this on Debian 12. I expect you to troubleshoot everything yourself whe
 ```bash
 uv venv && uv sync
 ```
+- To set up pre-commit hooks, use this:
+```bash
+pre-commit install
+```
 - Create a .env file in the same directory as .env-example.
-- Run db migrations inside a Docker container with the backend:
-```bash
-alembic upgrade head
-```
-- Run tests inside a Docker container (you may need `sudo`):
-```bash
-bash scripts/test.sh
-```
 - Build and run the project with Docker (again, you may need to use `sudo`):
 ```bash
 docker compose build && docker compose up
 ```
-- Use private endpoints to create users.
-- Set up pre-commit hooks:
+- To run tests inside a Docker container, use this (you may need `sudo`):
 ```bash
-pre-commit install
+bash scripts/test.sh
 ```
+- Run db migrations within a running Docker container with the backend:
+```bash
+alembic upgrade head
+```
+- Use private endpoints to create users.
